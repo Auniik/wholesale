@@ -16,7 +16,6 @@ class CreatePettyCashVouchersTable extends Migration
         Schema::create('petty_cash_vouchers', function (Blueprint $table) {
             $table->increments('id');
             $table->date('date');
-            $table->unsignedInteger('department_id');
             $table->double('amount', 10, 2);
             $table->unsignedInteger('company_id')->index();
             $table->unsignedInteger('created_by')->index();

@@ -16,7 +16,6 @@ class CreatePaymentSectorsTable extends Migration
         Schema::create('payment_sector', function (Blueprint $table) {
             $table->increments('id');
             $table->string('sector_name');
-            $table->tinyInteger('sector_type')->comment('1 = general, 2 = asset, 3 = loan');
             $table->tinyInteger('status')->default(1);
             $table->tinyInteger('type')->comment('1=Expense, 2=Receive');
             $table->unsignedInteger('created_by')->index();

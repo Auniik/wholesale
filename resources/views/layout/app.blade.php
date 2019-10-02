@@ -14,7 +14,7 @@
     <meta http-equiv="Pragma" content="no-cache"> <!-- says not to use cached stuff, if there is any -->
 
     <meta name="csrf-param" content="_csrf">
-    <title>@yield('title') | Smart Hospital ERP</title>
+    <title>@yield('title') | Smart Inventory</title>
     <link rel="shortcut icon" href="{{asset('images/logo/favicon.png')}}" sizes="16x16">
     <meta http-equiv="refresh" content="1801">
 {{--    <link rel="stylesheet" href="{{asset('css/app.css')}}">--}}
@@ -64,7 +64,7 @@
                 <i class="fa fa-bars"></i>
             </div>
             <div class="navbar-header" style="background:#00B1E1">
-                <a class="navbar-brand text-bold" href="{{url('/')}}" title="Hospital ERP">Hospital ERP</a> </div>
+                <a class="navbar-brand text-bold" href="{{url('/')}}" title="Smart Inventory">Smart Inventory</a> </div>
         </div>
         <div class="header-right">
             <div class="navbar navbar-toolbar navbar-primary">
@@ -159,13 +159,8 @@
                     <img src="{{asset('images/dr.png')}}" alt="admin">
                 </a>
                 <div class="media-body">
-                    {{--@dd(auth()->user()->employees)--}}
                     <h4 class="media-heading">{{auth()->user()->name}}<span></span></h4>
-                    @if(!auth()->user()->employees)
-                        <small>{{auth()->user()->role->name}}</small>
-                    @else
-                        <small>{{auth()->user()->employees->designation->name}}</small>
-                    @endif
+                    <small>{{auth()->user()->role->name}}</small>
                 </div>
             </div>
         </div>

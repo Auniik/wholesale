@@ -20,10 +20,17 @@ class CreateBalanceTransfersTable extends Migration
             $table->timestamp('date');
             $table->double('amount', 10,2);
             $table->text('description')->nullable();
+            $table->timestamp('approved_at')->nullable();
+            $table->unsignedInteger('approved_by')->nullable();
+            $table->text('bank_slip');
             $table->unsignedInteger('company_id')->index();
             $table->unsignedInteger('created_by')->index();
             $table->unsignedInteger('updated_by')->nullable();
             $table->timestamps();
+
+
+
+            $table->foreign('approved_by')->references('id')->on('users');
 
             $table->foreign('transfer_from')->references('id')->on('account');
             $table->foreign('transfer_to')->references('id')->on('account');

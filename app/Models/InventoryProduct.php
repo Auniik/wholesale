@@ -12,9 +12,9 @@ class InventoryProduct extends Model
 {
     use AddingCompany;
     protected $fillable = [
-        'category_id', 'unit_id', 'wholesale_unit_id', 'brand_id', 'generic_id', 'medicine_type_id',
+        'category_id', 'unit_id', 'wholesale_unit_id', 'brand_id',
         'retail_quantity', 'retail_sales_price', 'retail_unit_tp', 'pack_size',
-        'name', 'strength', 'stock_limitation', 'status',
+        'name','stock_limitation', 'status',
         'created_by', 'updated_by', 'company_id',
     ];
 

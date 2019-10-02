@@ -19,6 +19,12 @@ class CreatePartiesTable extends Migration
             $table->string('telephone')->nullable();
             $table->string('mobile_number')->nullable();
             $table->string('email')->nullable();
+            $table->text('address')->nullable();
+            $table->string('contact_person_name')->nullable();
+            $table->string('contact_person_designation')->nullable();
+            $table->string('contact_person_department')->nullable();
+            $table->string('contact_person_telephone')->nullable();
+            $table->string('contact_person_mobile')->nullable();
             $table->tinyInteger('status');
             $table->unsignedInteger('company_id');
             $table->unsignedInteger('created_by');

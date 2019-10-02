@@ -15,7 +15,6 @@ class AddPackSizeInInventoryProductsTable extends Migration
     {
         Schema::table('inventory_products', function (Blueprint $table) {
             $table->double('pack_size', 10, 2);
-            $table->unsignedInteger('wholesale_unit_id');
         });
     }
 
@@ -28,7 +27,6 @@ class AddPackSizeInInventoryProductsTable extends Migration
     {
         Schema::table('inventory_products', function (Blueprint $table) {
             $table->dropColumn('pack_size');
-            $table->dropColumn('wholesale_unit_id');
         });
     }
 }

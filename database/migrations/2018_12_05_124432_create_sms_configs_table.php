@@ -18,10 +18,10 @@ class CreateSmsConfigsTable extends Migration
             $table->unsignedInteger('company_id')->index();
             $table->unsignedInteger('created_by');
             $table->unsignedInteger('updated_by')->nullable();
-            $table->string('masking_name');
-            $table->string('user_name');
-            $table->string('user_password');
-            $table->integer('sms_quantity');
+            $table->text('masking_name');
+            $table->text('user_name');
+            $table->text('user_password');
+            $table->text('sms_quantity');
             $table->timestamps();
         });
     }

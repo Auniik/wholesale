@@ -21,32 +21,13 @@
                     </div>
 
                     <div class="form-group">
+
                         <div class="col-md-3 col-md-offset-1">
-                            <label class="control-label" for="specification">Type * :</label>
-                            <select class="form-control select2" id="type" name="medicine_type_id" required>
-                                <option value="">Select Medicine Type</option>
-                                @foreach ($types ?? [] as $key => $value)
-                                    <option value="{{$key}}">{{$value}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md-3">
                             <label class="control-label" for="specification">Category * :</label>
                             <select class="form-control select2" id="category" name="category_id" required>
-                                <option value="">Select Medicine Category</option>
+                                <option value="">Select Product Category</option>
                                 @foreach ($categories ?? [] as $category)
                                     <option value="{{optional($category)->id}}">{{optional($category)->name}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-3 col-md-offset-1">
-                            <label class="control-label" for="specification">Generic Name * :</label>
-                            <select class="form-control select2" id="generic_id" name="generic_id" required>
-                                <option value="">Select Generic Name</option>
-                                @foreach ($generics ?? [] as $key => $value)
-                                    <option value="{{$key}}">{{$value}}</option>
                                 @endforeach
                             </select>
                         </div>

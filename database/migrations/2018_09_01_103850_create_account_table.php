@@ -16,7 +16,7 @@ class CreateAccountTable extends Migration
         Schema::create('account', function (Blueprint $table) {
             $table->increments('id');
             $table->float('opening_balance');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->tinyInteger('status');
             $table->string('account_name')->nullable()->comment('Bank Name');
             $table->string('branch_name')->nullable();
@@ -26,6 +26,9 @@ class CreateAccountTable extends Migration
             $table->unsignedInteger('fk_company_id')->index();
             $table->unsignedInteger('updated_by')->index();
             $table->float('current_balance');
+
+            $table->tinyInteger('default_status')->default(0);
+
             $table->timestamps();
 
             $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');

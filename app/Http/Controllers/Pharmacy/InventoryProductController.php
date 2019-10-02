@@ -75,8 +75,6 @@ class InventoryProductController extends Controller
                 'unit_id' => 'required',
                 'wholesale_unit_id' => 'required',
                 'brand_id' => 'required',
-                'generic_id' => 'required',
-                'medicine_type_id' => 'required',
                 'pack_size' => 'required',
         ]);
         $input = $request->all();

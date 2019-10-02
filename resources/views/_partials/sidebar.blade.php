@@ -49,9 +49,7 @@
                     @endcan
                     @can('inventory-settings-list')
                         <li><a href="{{ url('inventory-categories') }}">Product Categories</a></li>
-                        <li><a href="{{ url('medicine-types') }}">Medicine Types</a></li>
                         <li><a href="{{ url('inventory-brands') }}">Create Manufacturer</a></li>
-                        <li><a href="{{ url('inventory-generics') }}">Create Generic Name</a></li>
                         <li><a href="{{ url('inventory-barcodes') }}">Create Barcodes</a></li>
                         <li><a href="{{ url('inventory-units') }}">Unit Management</a></li>
                     @endcan

@@ -19,7 +19,8 @@ class CreateVoucherSectorPaymentsTable extends Migration
             $table->unsignedInteger('sector_id');
             $table->timestamps();
 
-            $table->foreign('sector_id')->references('id')->on('payment_sector');
+
+            $table->foreign('sector_id')->references('id')->on('voucher_sectors');
             $table->foreign('voucher_id')->references('id')->on('vouchers');
         });
     }

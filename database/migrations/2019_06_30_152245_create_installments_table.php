@@ -22,6 +22,8 @@ class CreateInstallmentsTable extends Migration
             $table->date('date');
             $table->double('amount', 10, 2);
             $table->morphs('installmentable');
+            $table->enum('status', ['pending', 'paid'])->default('pending');
+            $table->timestamp('paid_date')->nullable();
             $table->timestamps();
 
             $table->foreign('company_id')->references('id')->on('company_list');
