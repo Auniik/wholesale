@@ -30,8 +30,8 @@
                     <span class="text">Purchase Management </span><span class="arrow"></span>
                 </a>
                 <ul class=''>
-                    <li><a href="{{ url('inventory-product-purchases/create') }}">Product Purchase</a></li>
-                    <li><a href="{{ url('inventory-product-purchases') }}">All Purchase</a></li>
+                    <li><a href="{{ url('products/purchases/create') }}">Product Purchase</a></li>
+                    <li><a href="{{ url('products/purchases') }}">All Purchase</a></li>
                     {{--                    <li><a href="{{ url('parties') }}">Party Information</a></li>--}}
                     {{--<li><a href="javascript:void(0);">Purchase Return</a></li>--}}
                 </ul>
@@ -45,13 +45,16 @@
                 </a>
                 <ul class=''>
                     @can('inventory-settings-create')
-                        <li><a href="{{ url('inventory-products/create') }}">Create Product</a></li>
+                        <li><a href="{{ url('products/create') }}">Create Product</a></li>
                     @endcan
                     @can('inventory-settings-list')
-                        <li><a href="{{ url('inventory-categories') }}">Product Categories</a></li>
-                        <li><a href="{{ url('inventory-brands') }}">Create Manufacturer</a></li>
-                        <li><a href="{{ url('inventory-barcodes') }}">Create Barcodes</a></li>
-                        <li><a href="{{ url('inventory-units') }}">Unit Management</a></li>
+                        {{--<li><a href="{{ url('inventory-categories') }}">Product Categories</a></li>--}}
+                        <li><a href="{{ url('categories') }}">Create Categories</a></li>
+                        <li><a href="{{ url('products/codes') }}">Create Codes</a></li>
+                        {{--<li><a href="{{ url('inventory-brands') }}">Create Manufacturer</a></li>--}}
+                        <li><a href="{{ url('manufacturers') }}">Create Manufacturer</a></li>
+                        <li><a href="{{ url('barcodes') }}">Create Barcodes</a></li>
+{{--                        <li><a href="{{ url('inventory-units') }}">Unit Management</a></li>--}}
                     @endcan
                 </ul>
             </li>

@@ -12,15 +12,15 @@
             <div class="col-md-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        @can('sample-collection-list')
+                        @can('inventory-settings-list')
                             <div class="panel-heading-btn pull-right">
-                                <a class="btn btn-success btn-sm" href="/inventory-barcodes">All Barcode</a>
+                                <a class="btn btn-success btn-sm" href="/barcodes">All Barcode</a>
                             </div>
                         @endcan
                         <h4 class="panel-title"> Make Barcode For Products</h4>
                     </div>
                     <div class="panel-body" id="tabArea">
-                        <form action="{{route('inventory-barcodes.store')}}" method="post" class="form-horizontal">
+                        <form action="{{route('barcodes.store')}}" method="post" class="form-horizontal">
                             @csrf
                             {{--<div class="row">--}}
                                 {{--<div class="form-group col-md-4">--}}
@@ -169,9 +169,7 @@
             url: '{{url('/load-barcodeable-products')}}',
             select: function (event, ui) {
                 $(event.target).parents('.record-row').find('.product-ids').val(ui.item.data.id)
-                $(event.target).parents('.record-row').find('.available-quantities').val(ui.item.data.retail_quantity)
-                $(event.target).parents('.record-row').find('.unit-name').text(ui.item.data.unit.name)
-
+                $(event.target).parents('.record-row').find('.available-quantities').val(ui.item.data.quantity)
 
                 generateBarcodeNumber(ui.item.data.id, event)
 

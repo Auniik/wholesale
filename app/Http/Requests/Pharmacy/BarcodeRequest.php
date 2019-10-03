@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Pharmacy;
 
+use App\Models\Inventory\Barcode;
 use App\Models\InventoryProductBarcode;
 use Illuminate\Foundation\Http\FormRequest;
 use Picqer;
@@ -35,9 +36,9 @@ class BarcodeRequest extends FormRequest
     public function persist()
     {
         foreach ($this->product_id as $key => $productId){
-            InventoryProductBarcode::create([
+            Barcode::create([
                 'number' => $this->number[$key],
-                'inventory_product_id' => $productId,
+                'product_id' => $productId,
             ]);
         }
         return true;

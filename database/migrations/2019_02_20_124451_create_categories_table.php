@@ -1,10 +1,10 @@
-<?php
+A<?php
 
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateInventoryBrandsTable extends Migration
+class CreateCategoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,18 @@ class CreateInventoryBrandsTable extends Migration
      */
     public function up()
     {
-        Schema::create('inventory_brands', function (Blueprint $table) {
+        Schema::create('categories', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->tinyInteger('status');
+            $table->tinyInteger('status')->default(1);
             $table->unsignedInteger('created_by');
-            $table->unsignedInteger('updated_by');
+            $table->unsignedInteger('updated_by')->nullable();
             $table->unsignedInteger('company_id')->index();
             $table->timestamps();
 
             $table->foreign('company_id')->references('id')->on('company_list');
+            $table->foreign('created_by')->references('id')->on('users');
+            $table->foreign('updated_by')->references('id')->on('users');
         });
     }
 
@@ -33,6 +35,6 @@ class CreateInventoryBrandsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('inventory_brands');
+        Schema::dropIfExists('categories');
     }
 }

@@ -1,10 +1,10 @@
-A<?php
+<?php
 
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateInventoryCategoriesTable extends Migration
+class CreateProductCodesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,17 @@ class CreateInventoryCategoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('inventory_categories', function (Blueprint $table) {
+        Schema::create('product_codes', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
-            $table->tinyInteger('type');
-            $table->tinyInteger('status');
-            $table->unsignedInteger('created_by');
-            $table->unsignedInteger('updated_by');
             $table->unsignedInteger('company_id')->index();
+            $table->unsignedInteger('created_by')->index();
+            $table->unsignedInteger('updated_by')->nullable();
+            $table->string('name');
             $table->timestamps();
 
             $table->foreign('company_id')->references('id')->on('company_list');
+            $table->foreign('created_by')->references('id')->on('users');
+            $table->foreign('updated_by')->references('id')->on('users');
         });
     }
 
@@ -34,6 +34,6 @@ class CreateInventoryCategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('inventory_categories');
+        Schema::dropIfExists('product_codes');
     }
 }

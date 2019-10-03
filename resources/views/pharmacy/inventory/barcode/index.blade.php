@@ -12,7 +12,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="panel-heading-btn pull-right">
-                        <a class="btn btn-success btn-sm" href="/inventory-barcodes/create">Create New</a>
+                        <a class="btn btn-success btn-sm" href="/barcodes/create">Create New</a>
                     </div>
                     <h4 class="panel-title">Barcode Assigned Products <a href="" class="btn btn-xs
                     btn-default"></a></h4>
@@ -69,10 +69,10 @@
                                                  width:150px; height: 35px;">
                                     </td>
                                     <td>
-                                        <a href="/inventory-barcodes/{{$barcode->id}}" class="btn btn-xs btn-warning">
+                                        <a href="/barcodes/{{$barcode->id}}" class="btn btn-xs btn-warning">
                                             <i class="fa fa-print" aria-hidden="true"></i>
                                         </a>
-                                        <a href="{{route('inventory-barcodes.destroy', $barcode->id)}}" class="btn
+                                        <a href="{{route('barcodes.destroy', $barcode->id)}}" class="btn
                                         btn-xs btn-danger deletable"><i class="fa fa-trash-o" aria-hidden="true"></i>
                                         </a>
                                     </td>

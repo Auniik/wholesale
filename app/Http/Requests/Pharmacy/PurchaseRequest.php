@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\DB;
 
 class PurchaseRequest extends FormRequest
 {
-    use HospitalPaymentTrait;
     /**
      * Determine if the user is authorized to make this request.
      *

@@ -7,7 +7,8 @@
                     <div class="panel-heading">
                         @can('pharmacy-purchase-create')
                         <div class="panel-heading-btn pull-right">
-                            <a class="btn btn-primary btn-sm" href="{{route('inventory-product-purchases.create')}}">Purchase A New Product</a>
+                            <a class="btn btn-primary btn-sm" href="/products/purchases/create">Purchase A New
+                                Product</a>
                         </div>
                         @endcan
                         <h4 class="panel-title">All Products Purchases</h4>
@@ -34,17 +35,18 @@
                                     <td>{{$sl++}}</td>
                                     <td>
                                         @can('pharmacy-purchase-show')
-                                        <a  href="{{route('inventory-product-purchases.show', $purchase->id)}}">{{$purchase->challan_id}}</a>
+                                        <a  href="{{route('purchases.show', $purchase->id)
+                                        }}">{{$purchase->challan_id}}</a>
 {{--                                        @cannot('')--}}
                                         @endcan
                                     </td>
-                                    <td>{{$purchase->date->format('d/m/Y')}}</td>
-                                    <td>{{$purchase->manufacturer->name}}</td>
-                                    <td>{{number_format($purchase->subtotal, 2)}}</td>
-                                    <td>{{number_format($purchase->discount, 2)}}</td>
-                                    <td>{{number_format($purchase->paid ? $purchase->paid : $purchase->paid_amount, 2)
-                                    }}</td>
-                                    <td>{{number_format($purchase->due, 2)}}</td>
+                                    {{--<td>{{$purchase->date->format('d/m/Y')}}</td>--}}
+                                    {{--<td>{{$purchase->manufacturer->name}}</td>--}}
+                                    {{--<td>{{number_format($purchase->subtotal, 2)}}</td>--}}
+                                    {{--<td>{{number_format($purchase->discount, 2)}}</td>--}}
+                                    {{--<td>{{number_format($purchase->paid ? $purchase->paid : $purchase->paid_amount, 2)--}}
+                                    {{--}}</td>--}}
+                                    {{--<td>{{number_format($purchase->due, 2)}}</td>--}}
 {{--                                    <td><a href="{{route('inventory-product-purchases.edit', $purchase->id)}}" class="btn btn-xs btn-success" data-toggle="modal"><i class="fa fa-pencil-square-o"></i></a></td>--}}
                                     @if($purchase->approved_at)
                                         <td class="text-center" >

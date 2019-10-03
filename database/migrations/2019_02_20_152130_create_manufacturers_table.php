@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateInventoryUnitsTable extends Migration
+class CreateManufacturersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,18 @@ class CreateInventoryUnitsTable extends Migration
      */
     public function up()
     {
-        Schema::create('inventory_units', function (Blueprint $table) {
+        Schema::create('manufacturers', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
             $table->tinyInteger('status');
-            $table->unsignedInteger('company_id')->index();
             $table->unsignedInteger('created_by');
-            $table->unsignedInteger('updated_by')->nullable(true);
-            $table->enum('type', ['retail', 'wholesale']);
+            $table->unsignedInteger('updated_by')->nullable();
+            $table->unsignedInteger('company_id')->index();
             $table->timestamps();
 
             $table->foreign('company_id')->references('id')->on('company_list');
+            $table->foreign('created_by')->references('id')->on('users');
+            $table->foreign('updated_by')->references('id')->on('users');
         });
     }
 
@@ -34,6 +35,6 @@ class CreateInventoryUnitsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('inventory_units');
+        Schema::dropIfExists('manufacturers');
     }
 }

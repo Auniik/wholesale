@@ -18,8 +18,8 @@ class PermissionTableSeeder extends Seeder
 //        \App\Models\Permission::truncate();
 //        DB::statement("SET foreign_key_checks=1");
 
-        DB::statement("TRUNCATE TABLE roles_permissions RESTART IDENTITY CASCADE");
-        DB::statement("TRUNCATE TABLE permissions RESTART IDENTITY CASCADE");
+//        DB::statement("TRUNCATE TABLE roles_permissions RESTART IDENTITY CASCADE");
+//        DB::statement("TRUNCATE TABLE permissions RESTART IDENTITY CASCADE");
 
         $permissions = [
             //[0]Show Menu

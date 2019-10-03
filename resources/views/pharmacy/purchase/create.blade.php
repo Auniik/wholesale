@@ -12,16 +12,24 @@
         .table tbody tr td {
             padding: 5px;
         }
+        .aside_system{
+            margin-bottom: 0px;
+        }
+        .aside_btn{
+            margin-top: 20px;
+        }
     </style>
 @endpush
 @section('content')
 <div class="row">
-    <div class="col-md-12">
-        <div class="panel panel">
+    <form method="POST" action="{{route('product.purchases.store')}}" >
+        @csrf
+    <div class="col-md-9">
+        <div class="panel panel-default">
             <div class="panel-heading">
                 @can('pharmacy-purchase-list')
                 <div class="panel-heading-btn pull-right">
-                    <a class="btn btn-success btn-sm" href="{{route('inventory-product-purchases.index')}}">
+                    <a class="btn btn-success btn-sm" href="{{route('product.purchases.index')}}">
                         All Added Product
                     </a>
                 </div>
@@ -29,8 +37,7 @@
                 <h4 class="panel-title">Purchase Product</h4>
             </div>
             <div class="panel-body no-padding">
-                <form method="POST" action="{{route('inventory-product-purchases.store')}}" >
-                    @csrf
+
                     <div class="col-md-12">
                         <div class='row'>
                             <div class="col-md-12">
@@ -40,8 +47,8 @@
                                             <label class="control-label">Manufacturer Name :</label>
                                             <select class="form-control select2" name="manufacturer_id" id="manufacturer_id">
                                                 <option value="">Select One</option>
-                                                @foreach($manufacturers as $manufacturer)
-                                                    <option value="{{$manufacturer->id}}">{{$manufacturer->name}}</option>
+                                                @foreach($manufacturers as $id => $name)
+                                                    <option value="{{$id}}">{{$name}}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -64,16 +71,15 @@
 
                                 </div>
                                 <div class="row"> <br>
-                                    <div class="col-md-8">
+                                    <div class="col-md-12">
 
                                         <table class="table table-bordered table-hover" id="table_auto">
                                             <thead>
                                             <th>Product Name</th>
+                                            <th width="16%">Product Code</th>
                                             <th width="12%">Unit TP</th>
                                             <th width="12%">Sales Price</th>
-                                            <th width="11%">Pack Size</th>
-                                            <th colspan="2" width="10%">Qty</th>
-                                            {{--<th width="10%">Unit Vat</th>--}}
+                                            <th  width="10%">Qty</th>
                                             <th width="16%">Expiry Date</th>
                                             <th width="10%">Total TP</th>
                                             </thead>
@@ -83,71 +89,6 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group aside_system">
-                                            <label class="col-md-3 control-label">Sub Total</label>
-                                            <div class="input-group col-md-9">
-                                                <div class="input-group-addon currency">৳</div>
-                                                <input tabindex="-1" value="0" type="number" min="0" step="any"
-                                                       class="form-control" name="subtotal" id="subTotal" placeholder="Sub
-                                               Total"readonly>
-                                            </div>
-                                        </div>
-                                        {{--<div class="form-group aside_system">--}}
-                                        {{--<label class="col-md-3">Total Vat:</label>--}}
-                                        {{--<div class="input-group col-md-9">--}}
-                                        {{--<div class="input-group-addon currency">৳</div>--}}
-                                        {{--<input tabindex="-1" type="number" min="0" step="any" class="form-control" value="" name="total_vat" id="vatAmount" placeholder="Total Vat" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;" readonly>--}}
-                                        {{--</div>--}}
-                                        {{--</div>--}}
-                                        <div class="form-group aside_system">
-                                            <label class="col-md-3">Discount</label>
-                                            <div class="input-group col-md-9">
-                                                <div class="input-group-addon currency">৳</div>
-                                                <input tabindex="-1" value="0" type="number" min="0" step="any"
-                                                       class="form-control" name="discount" id="discount" placeholder="Discount">
-                                            </div>
-                                        </div>
-                                        <div class="form-group aside_system">
-                                            <label class="col-md-3">Grand Total</label>
-                                            <div class="input-group col-md-9">
-                                                <div class="input-group-addon currency">৳</div>
-                                                <input tabindex="-1" value="" type="number" min="0" step="any"
-                                                       class="form-control"  name="grand_total" id="grandTotal"
-                                                       placeholder="Grand Total" readonly>
-                                            </div>
-                                        </div>
-                                        <div class="form-group aside_system">
-                                            <label class="col-md-3 control-label">Total Paid</label>
-                                            <div class="input-group col-md-9">
-                                                <div class="input-group-addon currency">৳</div>
-                                                <input value="0" type="number" min="0" step="any" class="form-control"
-                                                       name="paid_amount" id="totalPaid" placeholder="Total Paid">
-                                            </div>
-                                        </div>
-                                        <div class="form-group aside_system">
-                                            <label class="col-md-3">Total Due</label>
-                                            <div class="input-group col-md-9">
-                                                <div class="input-group-addon currency">৳</div>
-                                                <input tabindex="-1" value="" type="number" min="0" step="any"
-                                                       class="form-control" name="due_amount" id="totalDue"
-                                                       placeholder="Total Due" readonly>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-8 col-sm-8 pull-right">
-                                                <div class="form-group">
-                                                    <button type="submit" name="draft" class="btn btn-primary" style="width: 100%;">Confirm</button>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4 col-sm-4 pull-right">
-                                                <div class="from-group">
-                                                    <button type="submit" name="confirm" class="btn btn-success" style="width: 100%">Draft</button>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -155,7 +96,6 @@
                         <hr>
                         <div class='row'>
                             <div class='col-xs-12 col-sm-7 col-md-7 col-lg-7'>
-
 
                             </div>
 
@@ -168,14 +108,90 @@
                             <div class="col-md-6"></div>
                         </div>
                     </div>
-                </form>
+
             </div>
         </div>
     </div>
+
+    <div class="col-md-3">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">Payment</h4>
+            </div>
+            <div class="panel-body">
+                {{--<div class="col-md-3">--}}
+                    <div class="form-group aside_system">
+                        <label class=" control-label">Sub Total</label>
+                        <div class="input-group col-md-12">
+                            <div class="input-group-addon currency">৳</div>
+                            <input tabindex="-1" value="0" type="number" min="0" step="any"
+                                   class="form-control" name="subtotal" id="subTotal" placeholder="Sub
+                                               Total"readonly>
+                        </div>
+                    </div>
+
+                    <div class="form-group aside_system">
+                        <label class="control-label">Discount</label>
+                        <div class="input-group col-md-12">
+                            <div class="input-group-addon currency">৳</div>
+                            <input tabindex="-1" value="0" type="number" min="0" step="any"
+                                   class="form-control" name="discount" id="discount" placeholder="Discount">
+                        </div>
+                    </div>
+                    <div class="form-group aside_system">
+                        <label class="control-label">Grand Total</label>
+                        <div class="input-group col-md-12">
+                            <div class="input-group-addon currency">৳</div>
+                            <input tabindex="-1" value="" type="number" min="0" step="any"
+                                   class="form-control"  name="grand_total" id="grandTotal"
+                                   placeholder="Grand Total" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group aside_system">
+                        <label class="control-label">Total Paid</label>
+                        <div class="input-group col-md-12">
+                            <div class="input-group-addon currency">৳</div>
+                            <input value="0" type="number" min="0" step="any" class="form-control"
+                                   name="paid_amount" id="totalPaid" placeholder="Total Paid">
+                        </div>
+                    </div>
+                    <div class="form-group aside_system">
+                        <label class="control-label">Total Due</label>
+                        <div class="input-group col-md-12">
+                            <div class="input-group-addon currency">৳</div>
+                            <input tabindex="-1" value="" type="number" min="0" step="any"
+                                   class="form-control" name="due_amount" id="totalDue"
+                                   placeholder="Total Due" readonly>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8 col-sm-8 pull-right">
+                            <div class="form-group aside_btn">
+                                <button type="submit" name="draft" class="btn btn-primary" style="width: 100%;">Confirm</button>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-4 pull-right">
+                            <div class="from-group aside_btn">
+                                <button type="submit" name="confirm" class="btn btn-success" style="width: 100%">Draft</button>
+                            </div>
+                        </div>
+                    </div>
+
+                {{--</div>--}}
+            </div>
+        </div>
+    </div>
+    </form>
 </div>
+
 @endsection
 
 @section('script')
+
+    <script>
+
+    </script>
+
 
     <script>
         $(document).on('focus', '.purchaseDate, .expireDate, .add-expire-date', function () {
@@ -190,15 +206,23 @@
     <script src="{{asset('custom_js/loadDetails.js')}}"></script>
 
     <script>
-        loadDetails({
-            selector: '#drug-name',
-            url: '{{'/load-drug'}}',
-            select: function (event, ui) {
-                $('.add-product-id').val(ui.item.data.id);
-                $('.drug-name').val(ui.item.data.name);
-            }
+        {{--loadDetails({--}}
+            {{--selector: '#drug-name',--}}
+            {{--url: '{{'/load-drug'}}',--}}
+            {{--select: function (event, ui) {--}}
+                {{--$('.add-product-id').val(ui.item.data.id);--}}
+                {{--$('.drug-name').val(ui.item.data.name);--}}
 
-        });
+                {{----}}
+            {{--}--}}
+
+        {{--});--}}
+        loadDetails({
+            selector: '#product-code-ids',
+            url: '{{url('get_codes')}}/'+$('.add-product-id').val(),
+            select: function (event, ui) {}
+        })
+
 
     </script>
 

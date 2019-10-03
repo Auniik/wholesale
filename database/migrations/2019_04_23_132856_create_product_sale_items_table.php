@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateInventoryProductSaleItemsTable extends Migration
+class CreateProductSaleItemsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,19 @@ class CreateInventoryProductSaleItemsTable extends Migration
      */
     public function up()
     {
-        Schema::create('inventory_product_sale_items', function (Blueprint $table) {
+        Schema::create('product_sale_items', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('inventory_product_sale_id');
+            $table->unsignedInteger('product_sale_id');
             $table->unsignedInteger('product_id');
-            $table->integer('sales_qty');
+            $table->unsignedInteger('product_code_id');
+            $table->integer('quantity');
             $table->double('sales_price', 10, 2);
             $table->double('item_price', 10, 2);
             $table->timestamps();
 
-            $table->foreign('product_id')->references('id')->on('inventory_products');
-            $table->foreign('inventory_product_sale_id', 'fk_ips_id')->references('id')->on('inventory_product_sales')->onDelete('cascade');
+            $table->foreign('product_id')->references('id')->on('products');
+            $table->foreign('product_code_id')->references('id')->on('product_codes');
+            $table->foreign('product_sale_id')->references('id')->on('product_sales');
         });
     }
 
@@ -34,6 +36,6 @@ class CreateInventoryProductSaleItemsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('inventory_product_sale_items');
+        Schema::dropIfExists('product_sale_items');
     }
 }

@@ -45,7 +45,7 @@
                         <div class="panel-heading-btn pull-right">
                             <a href="javascript:;" onclick="printPage('print_body')" class="printbtn btn btn-sm
                             btn-success m-b-10"><i class="fa fa-print m-r-5"></i> Print</a>
-                            <a class="btn btn-info btn-sm" href="{{route('inventory-barcodes.index')}}">View All</a>
+                            <a class="btn btn-info btn-sm" href="{{route('barcodes.index')}}">View All</a>
 
                         </div>
                         <h4 class="panel-title">Print Product Barcode</h4>

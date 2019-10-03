@@ -71,15 +71,15 @@ Route::middleware(['auth'])->group(function () {
 //   * Ajax Party Get
     Route::get('party', 'PartyController@getByName');
 
-    Route::resource('crm-event','CrmEventController');
-    Route::get('crm-event-delete/{id}',['as'=>'event.delete','uses'=>'CrmEventController@destroy']);
+//    Route::resource('crm-event','CrmEventController');
+//    Route::get('crm-event-delete/{id}',['as'=>'event.delete','uses'=>'CrmEventController@destroy']);
 
-    Route::resource('crm-subject','CrmSubjectController');
-    Route::get('crm-subject-delete/{id}',['as'=>'crm_subject.delete','uses'=>'CrmSubjectController@destroy']);
+//    Route::resource('crm-subject','CrmSubjectController');
+//    Route::get('crm-subject-delete/{id}',['as'=>'crm_subject.delete','uses'=>'CrmSubjectController@destroy']);
 
-    Route::resource('crm-stage','CrmStageController');
-    Route::get('crm-stage-delete/{id}',['as'=>'crm_stage.delete','uses'=>'CrmStageController@destroy']);
-    Route::resource('crm-task','CrmTaskController');
+//    Route::resource('crm-stage','CrmStageController');
+//    Route::get('crm-stage-delete/{id}',['as'=>'crm_stage.delete','uses'=>'CrmStageController@destroy']);
+//    Route::resource('crm-task','CrmTaskController');
 
 
     Route::resource('tasks','TaskController');
@@ -148,19 +148,19 @@ Route::middleware(['auth'])->group(function () {
     Route::get('voucher-payments/{payment}', 'VoucherPaymentController@show');
     Route::delete('voucher-payments/{payment}', 'VoucherPaymentController@destroy');
 //  * Office Equipments
-    Route::resource('equipment-categories', 'Procurement\EquipmentCategoryController');
-    Route::resource('equipments', 'Procurement\EquipmentController');
-    Route::resource('equipment-purchases', 'Procurement\EquipmentPurchaseController');
-    Route::resource('equipment-distributes', 'Procurement\EquipmentDistributeController');
-    Route::get('load-office-equipments-categories', 'Procurement\EquipmentCategoryController@categories');
-    Route::get('load-office-equipments', 'Procurement\EquipmentController@getProducts');
+//    Route::resource('equipment-categories', 'Procurement\EquipmentCategoryController');
+//    Route::resource('equipments', 'Procurement\EquipmentController');
+//    Route::resource('equipment-purchases', 'Procurement\EquipmentPurchaseController');
+//    Route::resource('equipment-distributes', 'Procurement\EquipmentDistributeController');
+//    Route::get('load-office-equipments-categories', 'Procurement\EquipmentCategoryController@categories');
+//    Route::get('load-office-equipments', 'Procurement\EquipmentController@getProducts');
     //  * Purchase Payment
     //  * Purchase Due Payments
-    Route::post('purchases/{purchase}/payments', 'Procurement\EquipmentPurchasePaymentController@store');
-    Route::get('purchases/{purchase}/payments/create', 'Procurement\EquipmentPurchasePaymentController@create');
-    Route::get('purchases/{purchase}/payments', 'Procurement\EquipmentPurchasePaymentController@index');
-    Route::get('purchase-payments/{payment}', 'Procurement\EquipmentPurchasePaymentController@show');
-    Route::delete('purchase-payments/{payment}', 'Procurement\EquipmentPurchasePaymentController@destroy');
+//    Route::post('purchases/{purchase}/payments', 'Procurement\EquipmentPurchasePaymentController@store');
+//    Route::get('purchases/{purchase}/payments/create', 'Procurement\EquipmentPurchasePaymentController@create');
+//    Route::get('purchases/{purchase}/payments', 'Procurement\EquipmentPurchasePaymentController@index');
+//    Route::get('purchase-payments/{payment}', 'Procurement\EquipmentPurchasePaymentController@show');
+//    Route::delete('purchase-payments/{payment}', 'Procurement\EquipmentPurchasePaymentController@destroy');
     //  * installments
     Route::resource('installments', 'InstallmentController');
 
@@ -181,14 +181,39 @@ Route::middleware(['auth'])->group(function () {
      * Inventory Settings
      * Inventory Reports
      * */
-    Route::resource('inventory-categories', 'Pharmacy\InventoryCategoryController');
-    Route::resource('medicine-types', 'Pharmacy\MedicineTypeController');
-    Route::resource('inventory-brands', 'Pharmacy\InventoryBrandController');
-    Route::resource('inventory-units', 'Pharmacy\InventoryUnitController');
-    Route::resource('inventory-generics', 'Pharmacy\MedicineGenericController');
-    Route::resource('inventory-products', 'Pharmacy\InventoryProductController');
-    Route::resource('inventory-barcodes', 'Pharmacy\InventoryProductBarcodeController');
-    Route::resource('inventory-product-purchases', 'Pharmacy\InventoryProductPurchaseController');
+
+    Route::prefix('products')->group(function () {
+        Route::resource('categories', 'Inventory\CategoryController');
+//    Route::resource('medicine-types', 'Pharmacy\MedicineTypeController');
+//    Route::resource('inventory-brands', 'Pharmacy\InventoryBrandController');
+        Route::resource('manufacturers', 'Inventory\ManufacturerController');
+        Route::resource('barcodes', 'Inventory\BarcodeController');
+        Route::resource('codes', 'Inventory\ProductCodeController', ['as' => 'product']);
+
+        Route::resource('purchases', 'Inventory\ProductPurchaseController', ['as' => 'product']);
+
+    });
+    Route::resource('/products', 'Inventory\ProductController');
+
+
+
+//    Route::resource('inventory-categories', 'Pharmacy\InventoryCategoryController');
+//    Route::resource('medicine-types', 'Pharmacy\MedicineTypeController');
+//    Route::resource('inventory-brands', 'Pharmacy\InventoryBrandController');
+
+    Route::get('load-barcodeable-products', 'Inventory\BarcodeController@loadBarcodeableProducts');
+    Route::get('get-barcode/{product}', 'Inventory\BarcodeController@getBarcodeNumber');
+    Route::get('get-purchasable-products/{id}', 'Inventory\ProductPurchaseController@purchasableProducts');
+    Route::get('get_codes/{product}', 'Inventory\ProductPurchaseController@productCodes');
+    Route::get('load-product', 'Inventory\ProductController@loadProduct');
+
+//    Route::resource('inventory-units', 'Pharmacy\InventoryUnitController');
+//    Route::resource('inventory-generics', 'Pharmacy\MedicineGenericController');
+
+//    Route::resource('inventory-products', 'Pharmacy\InventoryProductController');
+//    Route::resource('inventory-barcodes', 'Pharmacy\InventoryProductBarcodeController');
+//    Route::resource('inventory-product-purchases', 'Pharmacy\InventoryProductPurchaseController');
+
 
     Route::delete('product-purchases/{item}', 'Pharmacy\InventoryProductPurchaseController@productDelete');
 
@@ -227,10 +252,10 @@ Route::middleware(['auth'])->group(function () {
 
         //Accounts
         Route::prefix('accounts')->group(function () {
-            Route::get('cash-collections', 'report\AccountsReportController@cashCollection');
-            Route::get('daily-cash-receives', 'report\AccountsReportController@dailyCashReceived');
-            Route::get('income-expense', 'report\AccountsReportController@incomeExpense');
-            Route::get('petty-cash', 'report\AccountsReportController@pettyCash');
+//            Route::get('cash-collections', 'report\AccountsReportController@cashCollection');
+//            Route::get('daily-cash-receives', 'report\AccountsReportController@dailyCashReceived');
+//            Route::get('income-expense', 'report\AccountsReportController@incomeExpense');
+//            Route::get('petty-cash', 'report\AccountsReportController@pettyCash');
         });
 
     });

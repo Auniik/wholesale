@@ -8,7 +8,8 @@
                 <div class="panel-heading-btn pull-right">
                     @can('inventory-settings-create')
                     <div class="create_button">
-                        <a href="ui_modal_notification.html#modal-dialog" class="btn btn-sm btn-success" data-toggle="modal">Add New Category</a>
+                        <a href="ui_modal_notification.html#modal-dialog" class="btn btn-sm btn-success"
+                           data-toggle="modal">Add New Category</a>
                     </div>
                     @endcan
                 </div>
@@ -20,7 +21,7 @@
                 <div class="modal fade" id="modal-dialog">
                     <div class="modal-dialog">
                         <div class="modal-content">
-                            <form method="POST" action="{{route('inventory-categories.store')}}" class="form-horizontal author_form" id="commentForm" role="form" data-parsley-validate novalidate enctype="multipart/form-data">
+                            <form method="POST" action="{{route('categories.store')}}" class="form-horizontal">
                                 @csrf
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -30,7 +31,8 @@
                                     <div class="form-group">
                                         <label class="control-label col-md-4 col-sm-4">Category Name *:</label>
                                         <div class="col-md-8 col-sm-8">
-                                            <input type="text" class="form-control" name="  name" value="" placeholder="Enter category Name">
+                                            <input type="text" class="form-control" name="name" autocomplete="off"
+                                                   placeholder="Enter category Name">
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -38,7 +40,8 @@
                                         <div class="col-md-2 col-sm-2">
                                             <div class="radio">
                                                 <label>
-                                                    <input type="radio" name="status" value="1" id="radio-required" checked /> Active
+                                                    <input type="radio" name="status" value="1" id="radio-required"
+                                                           checked /> Active
                                                 </label>
                                             </div>
                                         </div>
@@ -67,7 +70,7 @@
                     <table id="data-table" class="table table-striped table-bordered nowrap" width="100%">
                         <thead>
                         <tr>
-                            <th width="5%">SL</th>
+                            <th width="1%">#</th>
                             <th>Category Name</th>
                             <th class="text-center" width="10%">Status</th>
                             <th width="5%" class="text-center" colspan="2">Action</th>
@@ -83,17 +86,18 @@
                             @can('inventory-settings-update')
                             <td>
                                 <!-- edit section -->
-                                <a href="ui_modal_notification.html#modal-dialog{{$category->id}}" class="btn btn-xs btn-success" data-toggle="modal"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                <a href="dd#modal-dialog{{$category->id}}" class="btn btn-xs btn-success"
+                                   data-toggle="modal"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                 <!-- #modal-dialog -->
                                 <div class="modal fade" id="modal-dialog{{$category->id}}">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
-                                            <form method="POST" action="{{route('inventory-categories.update', $category->id)}}" class="form-horizontal author_form">
+                                            <form method="POST" action="{{route('categories.update', $category->id)}}" class="form-horizontal author_form">
                                                 @csrf
                                                 @method('patch')
                                                 <div class="modal-header">
                                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                                    <h4 class="modal-title">Modal Dialog</h4>
+                                                    <h4 class="modal-title">Edit Category</h4>
                                                 </div>
                                                 <div class="modal-body">
                                                     <div class="form-group">
@@ -134,7 +138,7 @@
                             @endcan
                             @can('inventory-settings-delete')
                             <td>
-                                <a href="{{route('inventory-categories.destroy', $category->id)}}" class="btn btn-xs btn-danger deletable">
+                                <a href="{{route('categories.destroy', $category->id)}}" class="btn btn-xs btn-danger deletable">
                                     <i class="fa fa-trash-o" aria-hidden="true"></i>
                                 </a>
                             </td>
