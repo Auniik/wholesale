@@ -36,6 +36,11 @@ class Product extends Model
     {
         return $this->hasOne(Barcode::class, 'product_id');
     }
+
+    public function codes()
+    {
+        return $this->hasMany(ProductCode::class, 'product_id');
+    }
     //Product Sale
     public function salesItems()
     {

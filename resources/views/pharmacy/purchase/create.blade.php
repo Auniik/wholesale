@@ -125,7 +125,7 @@
                         <div class="input-group col-md-12">
                             <div class="input-group-addon currency">৳</div>
                             <input tabindex="-1" value="0" type="number" min="0" step="any"
-                                   class="form-control" name="subtotal" id="subTotal" placeholder="Sub
+                                   class="form-control" name="amount" id="subTotal" placeholder="Sub
                                                Total"readonly>
                         </div>
                     </div>
@@ -187,12 +187,6 @@
 @endsection
 
 @section('script')
-
-    <script>
-
-    </script>
-
-
     <script>
         $(document).on('focus', '.purchaseDate, .expireDate, .add-expire-date', function () {
             $(this).datepicker({
@@ -203,25 +197,28 @@
         })
     </script>
 
-    <script src="{{asset('custom_js/loadDetails.js')}}"></script>
-
     <script>
-        {{--loadDetails({--}}
-            {{--selector: '#drug-name',--}}
-            {{--url: '{{'/load-drug'}}',--}}
-            {{--select: function (event, ui) {--}}
-                {{--$('.add-product-id').val(ui.item.data.id);--}}
-                {{--$('.drug-name').val(ui.item.data.name);--}}
-
-                {{----}}
-            {{--}--}}
-
-        {{--});--}}
-        loadDetails({
-            selector: '#product-code-ids',
-            url: '{{url('get_codes')}}/'+$('.add-product-id').val(),
-            select: function (event, ui) {}
+        $(document).on('focus', '.product-code-names', function (e) {
+            $(this).autocomplete({
+                source: function(request, response){
+                    $.getJSON("{{url('get_codes')}}/"+$(this.element).parents('.product-row').find('.product-ids').val(),
+                        {name: request.term},
+                        function (data) {
+                            response($.map(data, function (item) {
+                                return {
+                                    data: item,
+                                    value: item.name,
+                                    label: item.name
+                                };
+                            }))
+                        }
+                    )
+                },
+                minLength: 1,
+                autoFocus: true
+            })
         })
+
 
 
     </script>

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Pharmacy\PurchaseRequest;
 use App\Models\Inventory\Manufacturer;
 use App\Models\Inventory\Product;
+use App\Models\Inventory\ProductCode;
 use App\Models\Inventory\ProductPurchase;
 use Illuminate\Http\Request;
 
@@ -125,6 +126,9 @@ class ProductPurchaseController extends Controller
 
     public function productCodes(Request $request, Product $product)
     {
-
+        $productCodes =  ProductCode::where('company_id', company_id())
+            ->where('product_id', $product->id)
+            ->get(['id', 'name']);
+        return response($productCodes, 200);
     }
 }

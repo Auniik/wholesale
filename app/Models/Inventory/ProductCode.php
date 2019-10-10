@@ -9,6 +9,11 @@ class ProductCode extends Model
 {
     use AddingCompany;
     protected $fillable = [
-        'name', 'created_by', 'updated_by', 'company_id'
+        'name', 'product_id', 'created_by', 'updated_by', 'company_id'
     ];
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class,'product_id');
+    }
 }

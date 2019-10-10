@@ -324,9 +324,9 @@
 </script>
  {{--success or error message hiding process--}}
 <script type="text/javascript">
-    $(document).ready( function() {
-        $('#success-text').delay(2000).fadeOut();
-    });
+    // $(document).ready( function() {
+    //     $('#success-text').delay(2000).fadeOut();
+    // });
 
     if(!!window.performance && window.performance.navigation.type === 2)
     {

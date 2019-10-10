@@ -10,26 +10,24 @@
                    id="product_id">
         </td>
         <td >
-            <input type="text" value="" name="product_code_id[]" tabindex="-1" autocomplete="off" class="form-control
-                   small-label-box
-            product-code-ids" id="product_code_id">
+            <input type="text" name="product_code_name[]" tabindex="-1" autocomplete="off" class="form-control
+                   small-label-box product-code-names" id="product_code_names">
         </td>
         <td>
             <input type="number" name="unit_tp[]" min="0" step="any" tabindex="-1" autocomplete="off" ondrop="return false;"
                    required
-                   value="{{$product->retail_unit_tp * $product->pack_size}}" id="unit_tp" class="form-control
+                   value="{{$product->unit_price}}" id="unit_tp" class="form-control
                    small-label-box unit-tps">
         </td>
         <td>
             <input type="number" name="sales_price[]" min="0" step="any" tabindex="-1" placeholder="Sales Price" required
-                   value="{{$product->retail_sales_price * $product->pack_size}}" class="form-control small-label-box
+                   value="{{$product->sales_price}}" class="form-control small-label-box
                     sales-prices">
         </td>
 
         <td>
             <input type="number" name="quantity[]" min="0" value="0" autocomplete="off" class="form-control
             small-label-box quantities"  ondrop="return false;" placeholder="Qty" required>
-            <input type="hidden" name="retail_quantity[]" min="0" class="retail-quantities" >
         </td>
 
         <td>

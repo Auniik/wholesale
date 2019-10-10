@@ -44,7 +44,7 @@ class ProductPurchase extends Model
 
     protected $fillable = [
         'company_id', 'created_by', 'updated_by', 'manufacturer_id', 'challan_id', 'date' ,
-        'subtotal', 'total_vat', 'discount', 'paid_amount', 'approved_by', 'approved_at'
+        'amount', 'discount', 'paid_amount', 'approved_by', 'approved_at'
     ];
 
     protected $dates = ['date'];

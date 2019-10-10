@@ -115,7 +115,6 @@ class ProductController extends Controller
             'category_id' => 'required|numeric',
             'manufacturer_id' => 'required|numeric',
         ]);
-//        dd($request->all());
         $product->update($request->all());
 
 

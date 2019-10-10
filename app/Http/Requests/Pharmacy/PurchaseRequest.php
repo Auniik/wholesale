@@ -2,10 +2,11 @@
 
 namespace App\Http\Requests\Pharmacy;
 
-use App\Models\InventoryProduct;
-use App\Models\InventoryProductPurchase;
+use App\Models\Inventory\Product;
+use App\Models\Inventory\ProductCode;
+use App\Models\Inventory\ProductPurchase;
 use App\Models\InventoryProductPurchaseItem;
-use App\Traits\HospitalPaymentTrait;
+use App\Rules\PurchaseProductCode;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\DB;
 
@@ -30,12 +31,21 @@ class PurchaseRequest extends FormRequest
     {
         $rules = [
             'product_id.*' => 'required|distinct',
+//            'product_code_name.*' => "required_if:quantity.*,>,0",
             'sales_price.*' => 'required',
             'quantity.*' => 'required',
             'date' => 'required',
             'discount' => 'required',
             'paid_amount' => 'required',
         ];
+
+        foreach ($this->product_id as $key => $product){
+            $rules += [
+                "product_code_name.{$key}" => $this->checkCode($key)
+            ];
+
+        }
+
         switch ($this->method()){
             case 'PATCH':
             case 'PUT':
@@ -48,35 +58,30 @@ class PurchaseRequest extends FormRequest
         }
     }
 
-    protected function itemAttributes($key)
+    private function checkCode($key) : string
     {
-        return [
-            'product_id' => $this->product_id[$key],
-            'pack_size' => $this->pack_size[$key],
-            'quantity' => $this->quantity[$key],
-            'retail_quantity' => $this->retail_quantity[$key],
-            'unit_tp' => $this->unit_tp[$key],
-            'sales_price' => $this->sales_price[$key],
-            'retail_sales_price' => $this->retail_sales_price[$key],
-            'unit_vat' => $this->unit_vat[$key],
-            'expiry_date' => $this->expiry_date[$key],
-        ];
+        if($this->quantity[$key] > 0){
+            return 'required';
+        }
+        return 'nullable';
     }
 
     public function store()
     {
+//        dd($this->all());
         return DB::transaction(function (){
-            if (!array_filter($this->get('retail_quantity'), function($v){return $v !== null;})){
+            if (!array_filter($this->get('quantity'), function($v){return $v !== null;})){
                 return false;
             }else{
 
                 $purchase = $this->purchaseCreate();
 
-                foreach ($this->get('retail_quantity') as $key => $retail_quantity){
-                    if($retail_quantity){
+                foreach ($this->get('quantity') as $key => $quantity){
+                    if($quantity){
 
                         $attributes = $this->itemAttributes($key);
 
+                        /** @var ProductPurchase $purchase */
                         $purchase->items()->create($attributes);
 
                         $this->updateQuantity($key, $this->product_id[$key]);
@@ -93,37 +98,63 @@ class PurchaseRequest extends FormRequest
 
     protected function purchaseCreate()
     {
-        $input = $this->except(
-            'product_name', 'party_name', 'product_id', 'pack_size', 'quantity', 'unit_tp',
-            'sales_price', 'unit_vat', 'amount', 'expiry_date'
+        $input = $this->only(
+            'manufacturer_id', 'challan_id', 'date', 'quantity', 'subtotal'
         );
-        return InventoryProductPurchase::create($input);
+        return ProductPurchase::create($input);
+    }
+
+    protected function itemAttributes($key)
+    {
+        return [
+            'product_id' => $this->product_id[$key],
+            'product_code_id' => $this->codeCreate($key),
+            'quantity' => $this->quantity[$key],
+            'unit_price' => $this->unit_tp[$key],
+            'sales_price' => $this->sales_price[$key],
+            'expiry_date' => $this->expiry_date[$key],
+        ];
+    }
+
+    public function codeCreate($key)
+    {
+        if ($this->product_code_name[$key]){
+            $codeName = trim($this->product_code_name[$key]);
+            $code = ProductCode::where('name', $codeName)->first();
+            return $code ? $code->id : ProductCode::create([ 'name' => $codeName ]);
+        }
     }
 
     protected function updateQuantity($key, $item)
     {
         $data = [
-            'retail_quantity' => $this->retail_quantity[$key],
-            'retail_unit_tp' => $this->retail_unit_tp[$key],
-            'retail_sales_price' => $this->retail_sales_price[$key],
-            'pack_size' => $this->pack_size[$key],
+            'quantity' => $this->quantity[$key],
+            'unit_price' => $this->unit_tp[$key],
+            'sales_price' => $this->sales_price[$key],
         ];
-        $inventory_product = InventoryProduct::where('id', $item)->first();
-        if ($inventory_product){
-            $data['retail_quantity'] += $inventory_product->retail_quantity;
-            $inventory_product->update($data);
+        $product = Product::where('id', $item)->first();
+        if ($product){
+            $data['quantity'] += $product->quantity;
+            $product->update($data);
         }
     }
+
+
+
+
+
+
 
     public function approve($purchase)
     {
         return DB::transaction(function () use ($purchase) {
 
             $purchase->update([
-                'subtotal' => $this->subtotal,
+                'amount' => $this->amount,
                 'discount' => $this->discount,
                 'paid_amount' => $this->paid_amount,
             ]);
+
             foreach ($this->get('id', []) as $key => $id){
 
                 $item = InventoryProductPurchaseItem::find($id);
@@ -134,7 +165,7 @@ class PurchaseRequest extends FormRequest
                 $this->updateQuantity($key, $this->product_id[$key]);
             }
 
-        $this->payment($purchase, -$this->paid_amount);
+//        $this->payment($purchase, -$this->paid_amount);
 
             return true;
         });

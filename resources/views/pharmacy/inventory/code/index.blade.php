@@ -77,9 +77,8 @@
                                         <td>{{$code->name}}</td>
                                         @can('inventory-settings-update')
                                             <td>
-                                                <a href="edit#modal-dialog1" class="btn btn-xs btn-success"
-                                                   data-toggle="modal" onclick="editModal('{{$code->id}}');"><i
-                                                            class="fa fa-pencil-square-o" ria-hidden="true"></i></a>
+                                                <a href="codes/{{$code->id}}/edit" class="btn btn-xs btn-success" ><i
+                                                    class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                             </td>
                                         @endcan
                                         @can('inventory-settings-delete')
@@ -101,45 +100,6 @@
         </div>
     </div>
 
-    <div class="modal fade" id="modal-dialog1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form method="POST" action="{{route('product.codes.update', $code->id)}}" class="form-horizontal
-                author_form">
-                    @csrf
-                    @method('patch')
-                    <div class="modal-header">
-                        <button type="button" class="close"
-                                data-dismiss="modal"  aria-hidden="true">×</button>
-                        <h4 class="modal-title">Edit Product Code</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label class="control-label col-md-2 col-sm-2" for="category_name">Name *
-                                :</label>
-                            <div class="col-md-8 col-sm-8">
-                                <input class="form-control" type="text" autocomplete="off" name="name"
-                                       value="{{$code->name}}"/>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-md-2 col-sm-2">Product Name
-                                    *:</label>
-                                <div class="col-md-8 col-sm-8">
-                                    <input type="text" class="form-control product_name"
-                                           autocomplete="off"                                                                                        placeholder="Search Product name">
-                                    <input type="hidden" class="product_id" name="product_id">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <a href="javascript:;" class="btn btn-sm btn-white"  data-dismiss="modal">Close</a>
-                        <button type="submit"  class="btn btn-sm btn-success">Update</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
 @endsection
 
 @section('script')

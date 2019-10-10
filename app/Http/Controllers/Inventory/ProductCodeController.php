@@ -69,12 +69,12 @@ class ProductCodeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Inventory\ProductCode  $productCode
-     * @return \Illuminate\Http\Response
+     * @param ProductCode $code
+     * @return void
      */
     public function edit(ProductCode $code)
     {
-        //
+        return view('pharmacy.inventory.code.edit', compact('code'));
     }
 
     /**
@@ -90,7 +90,7 @@ class ProductCodeController extends Controller
             'name' => "required|max:192|unique:product_codes,name,{$code->id}",
             'product_id' => 'required'
         ]);
-        $code->update($request->only('name'));
+        $code->update($request->only('name', 'product_id'));
         return back()->withSuccess('Category updated successfully!');
     }
 
