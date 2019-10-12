@@ -51,7 +51,7 @@ class ProductCodeController extends Controller
             'name' => 'required|max:192|unique:product_codes',
             'product_id' => 'required'
         ]);
-        ProductCode::create($request->all());
+        ProductCode::create($request->only('name', 'product_id'));
         return back()->withSuccess('Category Added Successfully!');
     }
 

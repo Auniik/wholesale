@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\Pharmacy;
 
+use App\Models\Inventory\Product;
+use App\Models\Inventory\ProductSale;
 use App\Models\InventoryProduct;
 use App\Models\InventoryProductSale;
 use App\Traits\HospitalPaymentTrait;
@@ -28,7 +30,11 @@ class SalesRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'party_id' => 'required',
+            'party_name' => 'required',
+            'code_names.*' => 'required',
+            'sales_qty.*' => 'required',
+            'product_code_id.*' => 'required',
         ];
     }
 
@@ -36,43 +42,59 @@ class SalesRequest extends FormRequest
     {
         return DB::transaction(function () {
 
-            $input =  $this->only('invoice_id', 'patient_name', 'patient_id', 'date', 'subtotal', 'discount', 'previous_due', 'paid_amount', 'due_amount');
+            $input =  $this->only(
+                'invoice_id', 'patient_id', 'date', 'amount', 'discount', 'paid', 'change'
+            );
 
-            $invoice = InventoryProductSale::create($input);
+            $invoice = ProductSale::create($input);
+
 
             $this->saleItems($invoice);
 
-            $this->salePayment($invoice);
+//            $this->salePayment($invoice);
 
             return $invoice;
 
         });
     }
 
-    private function saleItems($productSale)
+    private function saleItems(ProductSale $invoice)
     {
-        foreach ($this->get('product_id', []) as $key => $item){
-            $productSale->items()->create([
-                'product_id' => $item,
+        $items = $invoice->items;
+        foreach ($this->get('product_id', []) as $key => $productId){
+            $invoice->items()->create([
+                'product_id' => $productId,
+                'product_code_id' => $this->product_code_id[$key],
                 'sales_qty' => $this->sales_qty[$key],
-                'sales_price' => $this->sales_price[$key],
-                'item_price' => $this->item_price[$key],
+                'amount' => $this->sales_price[$key],
+                'unit_tp' => $this->item_price[$key],
             ]);
-            $inventoryProduct = InventoryProduct::find($item);
-            $inventoryProduct->update([
-                'retail_quantity' => $inventoryProduct->retail_quantity - $this->sales_qty[$key]
+
+            $item = $items->firstWhere('product_code_id', $this->product_code_id[$key]);
+
+//            dump($items, $this->product_code_id[$key]);
+            $item->productCode()->update([
+                'quantity' => $item->productCode->quantity - $this->sales_qty[$key]
             ]);
+
+
+            $product = Product::find($productId);
+            $product->update([
+                'quantity' => $product->quantity - $this->sales_qty[$key]
+            ]);
+
+
 
         }
     }
 
-    private function salePayment($invoice)
-    {
-        $paidAmount = $this->paid_amount;
-
-        $paidAmount >= $this->grand_total ?
-            $paidAmount =  $this->grand_total : false;
-
-        $this->payment($invoice, $paidAmount);
-    }
+//    private function salePayment($invoice)
+//    {
+//        $paidAmount = $this->paid_amount;
+//
+//        $paidAmount >= $this->grand_total ?
+//            $paidAmount =  $this->grand_total : false;
+//
+//        $this->payment($invoice, $paidAmount);
+//    }
 }

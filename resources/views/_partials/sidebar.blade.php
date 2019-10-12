@@ -16,8 +16,8 @@
                 <span class="text">Sales Management </span><span class="arrow"></span>
             </a>
                 <ul class=''>
-                    <li><a href="{{ url('inventory-product-sales/create') }}">New Sales</a></li>
-                    <li><a href="{{ url('inventory-product-sales') }}">All Sales</a></li>
+                    <li><a href="{{ url('products/sales/create') }}">New Sales</a></li>
+                    <li><a href="{{ url('products/sales') }}">All Sales</a></li>
                     {{--<li><a href="javascript:void(0);">Customer Opening Due</a></li>--}}
                     {{--<li><a href="javascript:void(0);">Sales Return</a></li>--}}
                 </ul>

@@ -52,10 +52,10 @@
             <div class="panel-heading no-print" style="height: 48px;">
                 <div class="panel-heading-btn pull-right">
                     @can('pharmacy-purchase-create')
-                    <a href="/inventory-product-purchases/create" class="btn btn-sm btn-success">Create New</a>
+                    <a href="/products/purchases/create" class="btn btn-sm btn-success">Create New</a>
                     @endcan
                     @can('pharmacy-purchase-list')
-                    <a href="/inventory-product-purchases" class="btn btn-sm btn-success">All Purchases</a>
+                    <a href="/products/purchases" class="btn btn-sm btn-success">All Purchases</a>
                     @endcan
                     <button onclick="printPage('print_body')" class="btn btn-sm btn-success"><i class="fa
                     fa-print"></i> Print</button>
@@ -72,11 +72,11 @@
                         <p>{{ $company->mobile_no }}, {{ $company->email}}</p>
                     </div>
                     <h6 style="width: 100%;text-align: center;margin-top: 15px;"><b style="padding: 10px 20px;
-                    border-radius: 10px;color: #000;border:1px solid #ddd;">Pharmacy Purchase</b></h6><hr>
+                    border-radius: 10px;color: #000;border:1px solid #ddd;">Purchase Invoice</b></h6><hr>
                     <div class="customerInfo" style="width: 50%;float: left;">
                         <h5><b><u>Manufacturer's Information : </u></b></h5>
 {{--                        <p class="patient"><b>ID : </b> {{ $inventoryProductPurchase->manufacturer->name }}</p>--}}
-                        <p class="patient"><b>Name : </b> {{$inventoryProductPurchase->manufacturer->name  }}</p>
+                        <p class="patient"><b>Name : </b> {{$productPurchase->manufacturer->name  }}</p>
                         {{--<p class="patient"><b>Age : </b> {{ $inventoryProductPurchase->patient->age }} &nbsp; &nbsp; <b>Sex :</b> {{ sex($inventoryProductPurchase->patient->sex) }}</p>--}}
 {{--                        <p class="patient"><b>Mobile : </b> {{ $inventoryProductPurchase->patient->mobile_number }}</p>--}}
                     </div>
@@ -84,15 +84,15 @@
                         <table class="table table-bordered">
                             <tr>
                                 <td> Invoice ID : </td>
-                                <td>{{ str_pad($inventoryProductPurchase->id, '3', 000, STR_PAD_LEFT)}}</td>
+                                <td>{{ str_pad($productPurchase->id, '3', 000, STR_PAD_LEFT)}}</td>
                             </tr>
                             <tr>
                                 <td> Challan ID : </td>
-                                <td>{!! $inventoryProductPurchase->challan_id !!}</td>
+                                <td>{!! $productPurchase->challan_id !!}</td>
                             </tr>
                             <tr>
                                 <td> Purchase Date : </td>
-                                <td>{{ $inventoryProductPurchase->date->toDayDateTimeString() }}</td>
+                                <td>{{ $productPurchase->date->toDayDateTimeString() }}</td>
                             </tr>
 
                         </table>
@@ -110,7 +110,7 @@
                         <tr>
                             <th width="1%">SL</th>
                             <th width="25%">Product Name</th>
-                            <th>Pack Size</th>
+                            <th>Product Code</th>
                             <th>Quantity</th>
                             <th>Unit TP</th>
                             <th>Sales Price</th>
@@ -119,13 +119,13 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($inventoryProductPurchase->items as $key => $item)
+                        @foreach($productPurchase->items as $key => $item)
                         <tr>
                             <td>{{++$key}}</td>
                             <td >{{$item->product->name}}</td>
-                            <td>{{$item->pack_size}}</td>
+                            <td >{{$item->productCode->name}}</td>
                             <td>{{$item->quantity}}</td>
-                            <td>{{$item->unit_tp}}</td>
+                            <td>{{$item->unit_price}}</td>
                             <td>{{$item->sales_price}}</td>
                             <td class="text-center">{{optional($item->expiry_date)->format('d-m-Y')}}</td>
                             <td align="right">{{ number_format($item->price , 2)}} &#x09F3;</td>
@@ -134,25 +134,25 @@
 
                         <tr>
                             <td colspan="7" style="text-align: right">Discount =</td>
-                            <th style="text-align: right">{{$inventoryProductPurchase->discount}} &#x09F3;</th>
+                            <th style="text-align: right">{{$productPurchase->discount}} &#x09F3;</th>
                         </tr>
                         <tr>
                             <td colspan="7" style="text-align: right">Total = </td>
-                            <th style="text-align: right">{{number_format($inventoryProductPurchase->totalAmount, 2)
+                            <th style="text-align: right">{{number_format($productPurchase->totalAmount, 2)
                             }} &#x09F3;
                             </th>
                         </tr>
                         <tr>
                             <td colspan="7" style="text-align: right">Paid =</td>
-                            <th style="text-align: right">{{number_format($inventoryProductPurchase->paid ?
-                            $inventoryProductPurchase->paid :
-                            $inventoryProductPurchase->paid_amount, 2)}}
+                            <th style="text-align: right">{{number_format($productPurchase->paid ?
+                            $productPurchase->paid :
+                            $productPurchase->paid_amount, 2)}}
                                 &#x09F3;</th>
                         </tr>
                         <tr>
                             <td colspan="7" style="text-align: right">Due =</td>
                             {{--                            <th style="text-align: right">{{number_format($patientBooking->due, 2)}} &#x09F3;</th>--}}
-                            <th style="text-align: right">{{ number_format(($inventoryProductPurchase->due), 2) }}
+                            <th style="text-align: right">{{ number_format(($productPurchase->due), 2) }}
                                 &#x09F3;</th>
                         </tr>
                         </tbody>
@@ -160,7 +160,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <h5>Amount Paid : <span> {{MyHelper::taka($inventoryProductPurchase->paid) . ''}}</span></h5>
+                        <h5>Amount Paid : <span> {{MyHelper::taka($productPurchase->paid) . ''}}</span></h5>
                     </div>
                 </div>
             </div>
@@ -171,7 +171,7 @@
                         <h5 style="width:50%;margin: 0 auto;border-top: 1px solid #000;padding: 10px 0;text-align: center;">Received By</h5>
                     </div>
                     <div class="company_sign" style="width: 33%; float: left;">
-                        <h5 style="width:50%; margin: 0 auto; padding: 10px 0;text-align: center;">{{$inventoryProductPurchase->user->name}}</h5>
+                        <h5 style="width:50%; margin: 0 auto; padding: 10px 0;text-align: center;">{{$productPurchase->createdBy->name}}</h5>
                         <h5 style="width:50%;margin: 0 auto;border-top: 1px solid #000;padding: 10px 0;text-align: center;">Prepared By</h5>
                     </div>
 

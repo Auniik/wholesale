@@ -7,7 +7,7 @@
                     <div class="panel-heading">
                         @can('pharmacy-sales-create')
                         <div class="panel-heading-btn pull-right">
-                            <a class="btn btn-primary btn-sm" href="{{route('inventory-product-sales.create')}}">Sell Products</a>
+                            <a class="btn btn-primary btn-sm" href="{{route('product.sales.create')}}">Sell Products</a>
                         </div>
                         @endcan
                         <h4 class="panel-title">All Sold Products</h4>
@@ -21,10 +21,10 @@
                                     <div class="col-md-12 ">
                                         <select name="patient_id" id="patient_id" class="form-control select">
                                             <option value="">Select All</option>
-                                            @foreach($patients as $id => $name)
-                                                <option value="{{$id}}" {{request('patient_id') == $id ? 'selected' :
-                                                ''}}>{{$name}}</option>
-                                            @endforeach
+                                            {{--@foreach($patients as $id => $name)--}}
+                                                {{--<option value="{{$id}}" {{request('patient_id') == $id ? 'selected' :--}}
+                                                {{--''}}>{{$name}}</option>--}}
+                                            {{--@endforeach--}}
                                         </select>
                                     </div>
                                 </div>
@@ -63,9 +63,9 @@
                                 <tr class="odd gradeX">
                                     <td>{{$sl++}}</td>
                                     <td>{{$sale->invoice_id}}</td>
-                                    <td>{{$sale->patient_name}}</td>
+                                    <td>{{$sale->party->name}}</td>
                                     <td>{{$sale->date->format('d/m/Y')}}</td>
-                                    <td class="text-right">{{$sale->subtotal}}</td>
+                                    <td class="text-right">{{$sale->amount}}</td>
                                     <td class="text-right">{{$sale->discount}}</td>
                                     <td class="text-right">{{$sale->paid}}</td>
                                     <td class="text-right">{{$sale->due}}</td>
@@ -73,17 +73,20 @@
                                     @can('pharmacy-sales-create')
                                         <td>
 
-                                            <a href="{{route('pharmacy-sales.create', $sale->id)}}"
+                                            <a href="{{route('product.sales.create', $sale->id)}}"
                                                class="btn btn-xs btn-warning" ><i class="fa fa-usd"></i></a>
                                         </td>
                                     @endcan
 
                                     @can('pharmacy-sales-show')
-                                    <td><a href="{{route('inventory-product-sales.show', $sale->id)}}" class="btn btn-xs btn-warning" ><i class="fa fa-eye"></i></a></td>
+                                    <td><a href="{{route('product.sales.show', $sale->id)}}" class="btn btn-xs
+                                    btn-warning" ><i class="fa fa-eye"></i></a></td>
                                     @endcan
 {{--                                    <td><a href="{{route('inventory-product-sales.edit', $sale->id)}}" class="btn btn-xs btn-success" ><i class="fa fa-pencil-square-o"></i></a></td>--}}
                                     @can('pharmacy-sales-delete')
-                                    <td><a href="{{route('inventory-product-sales.destroy', $sale->id)}}" class="btn btn-xs btn-danger deletable"><i class="fa fa-trash-o"></i></a></td>
+                                    <td><a href="{{route('product.sales.destroy', $sale->id)}}" class="btn
+                                    btn-xs
+                                    btn-danger deletable"><i class="fa fa-trash-o"></i></a></td>
                                     @endcan
                                 </tr>
                             @endforeach

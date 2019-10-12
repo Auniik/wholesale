@@ -191,6 +191,7 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('codes', 'Inventory\ProductCodeController', ['as' => 'product']);
 
         Route::resource('purchases', 'Inventory\ProductPurchaseController', ['as' => 'product']);
+        Route::resource('sales', 'Inventory\ProductSaleController', ['as' => 'product']);
 
     });
     Route::resource('/products', 'Inventory\ProductController');
@@ -202,6 +203,7 @@ Route::middleware(['auth'])->group(function () {
 //    Route::resource('inventory-brands', 'Pharmacy\InventoryBrandController');
 
     Route::get('load-barcodeable-products', 'Inventory\BarcodeController@loadBarcodeableProducts');
+    Route::get('load-saleable-products', 'Inventory\ProductSaleController@saleableProducts');
     Route::get('get-barcode/{product}', 'Inventory\BarcodeController@getBarcodeNumber');
     Route::get('get-purchasable-products/{id}', 'Inventory\ProductPurchaseController@purchasableProducts');
     Route::get('get_codes/{product}', 'Inventory\ProductPurchaseController@productCodes');

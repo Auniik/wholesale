@@ -48,8 +48,8 @@ function searchLabel(item, type)
     }
 
     if (type == 'nameWithQuantity') {
-        value =  item.name +' ('+item.retail_quantity +')';
-        label =  item.name +' ('+item.retail_quantity +')';
+        value =  item.name +' ('+item.quantity +')';
+        label =  item.name +' ('+item.quantity +')';
     }
 
     if (type == 'cardNumber') {

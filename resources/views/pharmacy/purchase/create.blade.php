@@ -23,7 +23,7 @@
 @section('content')
 <div class="row">
     <form method="POST" action="{{route('product.purchases.store')}}" >
-        @csrf
+    @csrf
     <div class="col-md-9">
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -119,7 +119,6 @@
                 <h4 class="panel-title">Payment</h4>
             </div>
             <div class="panel-body">
-                {{--<div class="col-md-3">--}}
                     <div class="form-group aside_system">
                         <label class=" control-label">Sub Total</label>
                         <div class="input-group col-md-12">
@@ -130,7 +129,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group aside_system">
+                    <div class="form-group aside_system hidden">
                         <label class="control-label">Discount</label>
                         <div class="input-group col-md-12">
                             <div class="input-group-addon currency">৳</div>

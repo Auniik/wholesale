@@ -5,6 +5,7 @@ namespace App\Http\Requests\Pharmacy;
 use App\Models\Inventory\Product;
 use App\Models\Inventory\ProductCode;
 use App\Models\Inventory\ProductPurchase;
+use App\Models\Inventory\ProductPurchaseItem;
 use App\Models\InventoryProductPurchaseItem;
 use App\Rules\PurchaseProductCode;
 use Illuminate\Foundation\Http\FormRequest;
@@ -39,7 +40,7 @@ class PurchaseRequest extends FormRequest
             'paid_amount' => 'required',
         ];
 
-        foreach ($this->product_id as $key => $product){
+        foreach ($this->get('product_id', []) as $key => $product){
             $rules += [
                 "product_code_name.{$key}" => $this->checkCode($key)
             ];
@@ -82,13 +83,15 @@ class PurchaseRequest extends FormRequest
                         $attributes = $this->itemAttributes($key);
 
                         /** @var ProductPurchase $purchase */
-                        $purchase->items()->create($attributes);
+                        $item = $purchase->items()->create($attributes);
+
+                        $this->updateCodeQuantity($item, $key);
 
                         $this->updateQuantity($key, $this->product_id[$key]);
                     }
                 }
 
-//                $this->payment($purchase, -$this->paid_amount);
+                $this->payment($purchase, -$this->paid_amount);
                 return $purchase;
             }
 
@@ -99,7 +102,7 @@ class PurchaseRequest extends FormRequest
     protected function purchaseCreate()
     {
         $input = $this->only(
-            'manufacturer_id', 'challan_id', 'date', 'quantity', 'subtotal'
+            'manufacturer_id', 'challan_id', 'date', 'quantity', 'amount'
         );
         return ProductPurchase::create($input);
     }
@@ -120,8 +123,16 @@ class PurchaseRequest extends FormRequest
     {
         if ($this->product_code_name[$key]){
             $codeName = trim($this->product_code_name[$key]);
-            $code = ProductCode::where('name', $codeName)->first();
-            return $code ? $code->id : ProductCode::create([ 'name' => $codeName ]);
+            $productId = $this->product_id[$key];
+            $code = ProductCode::where([
+                ['name', $codeName],
+                ['product_id', $productId],
+            ])->first();
+
+            return $codeId = $code ? $code->id : ProductCode::create([
+                'name' => $codeName,
+                'product_id' => $productId
+            ])->id;
         }
     }
 
@@ -137,38 +148,23 @@ class PurchaseRequest extends FormRequest
             $data['quantity'] += $product->quantity;
             $product->update($data);
         }
+
     }
 
 
-
-
-
-
-
-    public function approve($purchase)
+    private function payment(ProductPurchase $purchase, $amount) : void
     {
-        return DB::transaction(function () use ($purchase) {
-
-            $purchase->update([
-                'amount' => $this->amount,
-                'discount' => $this->discount,
-                'paid_amount' => $this->paid_amount,
-            ]);
-
-            foreach ($this->get('id', []) as $key => $id){
-
-                $item = InventoryProductPurchaseItem::find($id);
-                /** @var InventoryProductPurchaseItem $item */
-
-                $item->update($this->itemAttributes($key));
-
-                $this->updateQuantity($key, $this->product_id[$key]);
-            }
-
-//        $this->payment($purchase, -$this->paid_amount);
-
-            return true;
-        });
+        $purchase->payments()->create([
+            'amount' => $amount
+        ]);
     }
+
+    private function updateCodeQuantity(ProductPurchaseItem $item, $key)
+    {
+        $item->productCode()->update([
+            'quantity' => $item->productCode->quantity + $this->quantity[$key],
+        ]);
+    }
+
 
 }

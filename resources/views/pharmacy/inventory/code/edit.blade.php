@@ -33,6 +33,12 @@
                                         <input type="hidden" name="product_id" class="product_id"
                                                value="{{$code->product_id}}">
                                     </div>
+                                    <div class="form-group">
+                                        <label class="control-label" for="">Quantity</label>
+                                        <input class="form-control" type="text" value="{{$code->quantity}}" name="name"
+                                               autocomplete="off" readonly
+                                               placeholder="Quantity">
+                                    </div>
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">

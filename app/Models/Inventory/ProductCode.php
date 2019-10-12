@@ -9,7 +9,7 @@ class ProductCode extends Model
 {
     use AddingCompany;
     protected $fillable = [
-        'name', 'product_id', 'created_by', 'updated_by', 'company_id'
+        'name', 'product_id', 'quantity', 'created_by', 'updated_by', 'company_id'
     ];
 
     public function product()

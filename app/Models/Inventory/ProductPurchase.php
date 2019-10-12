@@ -2,7 +2,6 @@
 
 namespace App\Models\Inventory;
 
-use App\Models\Accounts\Transaction;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
@@ -18,25 +17,33 @@ class ProductPurchase extends Model
             $user = auth()->user();
             $model->fill([
                 'company_id' => $user->fk_company_id,
-                'created_by' => $user->id
+                'created_by' => $user->id,
             ]);
         });
 
         static::updating(function ($model){
             $model->fill([
                 'updated_by' => auth()->id(),
-                'approved_at' => now(),
-                'approved_by' => auth()->id()
+//                'approved_at' => now(),
+//                'approved_by' => auth()->id()
             ]);
         });
         static::deleting(function ($model){
+//            dd($model);
             foreach ($model->items as $item){
                 $inventoryProduct = Product::where('id', $item->product_id)->first();
                 $inventoryProduct->update([
-                    'retail_quantity' => $inventoryProduct->retail_quantity - $item->retail_quantity
+                    'quantity' => $inventoryProduct->quantity - $item->quantity
                 ]);
             }
+            $model->items->each->delete();
             $model->payments->each->delete();
+
+            foreach ($model->items as $item){
+                $item->productCode()->update([
+                    'quantity' => $item->productCode->quantity - $item->quantity,
+                ]);
+            }
 
         });
     }
@@ -44,7 +51,7 @@ class ProductPurchase extends Model
 
     protected $fillable = [
         'company_id', 'created_by', 'updated_by', 'manufacturer_id', 'challan_id', 'date' ,
-        'amount', 'discount', 'paid_amount', 'approved_by', 'approved_at'
+        'amount', 'discount', 'paid_amount',
     ];
 
     protected $dates = ['date'];
@@ -70,17 +77,17 @@ class ProductPurchase extends Model
 
     public function getTotalAmountAttribute()
     {
-        return ($this->subtotal + $this->total_vat) - $this->discount;
+        return $this->amount - $this->discount;
     }
 
     public function payments()
     {
-        return $this->morphMany(Transaction::class, 'transactionable');
+        return $this->morphMany(InventoryTransaction::class, 'transactionable');
     }
 
     public function payment()
     {
-        return $this->morphOne(Transaction::class, 'transactionable')
+        return $this->morphOne(InventoryTransaction::class, 'transactionable')
             ->selectRaw('sum(amount) as amount, transactionable_id')
             ->groupBy('transactionable_id');
     }

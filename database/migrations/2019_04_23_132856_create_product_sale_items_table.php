@@ -19,8 +19,8 @@ class CreateProductSaleItemsTable extends Migration
             $table->unsignedInteger('product_id');
             $table->unsignedInteger('product_code_id');
             $table->integer('quantity');
-            $table->double('sales_price', 10, 2);
-            $table->double('item_price', 10, 2);
+            $table->double('amount', 10, 2);
+            $table->double('unit_tp', 10, 2);
             $table->timestamps();
 
             $table->foreign('product_id')->references('id')->on('products');

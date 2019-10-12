@@ -66,6 +66,8 @@
                                 <tr>
                                     <th width="1%">#</th>
                                     <th>Name</th>
+                                    <th>Product Name</th>
+                                    <th>Quantity</th>
                                     <th width="5%" class="text-center" colspan="2">Action</th>
                                 </tr>
                                 </thead>
@@ -75,6 +77,8 @@
                                     <tr class="odd gradeX">
                                         <td>{{$sl++}}</td>
                                         <td>{{$code->name}}</td>
+                                        <td>{{$code->product->name}}</td>
+                                        <td>{{$code->quantity}}</td>
                                         @can('inventory-settings-update')
                                             <td>
                                                 <a href="codes/{{$code->id}}/edit" class="btn btn-xs btn-success" ><i

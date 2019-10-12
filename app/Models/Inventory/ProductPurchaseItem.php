@@ -27,6 +27,6 @@ class ProductPurchaseItem extends Model
 
     public function getPriceAttribute()
     {
-        return $this->quantity * $this->unit_tp;
+        return $this->quantity * $this->unit_price;
     }
 }

@@ -31,7 +31,7 @@ class ProductPurchaseController extends Controller
      */
     public function create()
     {
-        $challan_id = ProductPurchase::latest()->value('challan_id');
+        $challan_id = ProductPurchase::where('date', date('Y-m-d'))->value('challan_id');
         return view('pharmacy.purchase.create', [
             'challan_id' => $challan_id ? $challan_id += 1 : $challan_id = date('Ymd') . 1,
             'manufacturers' => Manufacturer::where('company_id', company_id())->pluck('name', 'id')
@@ -60,10 +60,10 @@ class ProductPurchaseController extends Controller
      * @param  \App\Models\Inventory\ProductPurchase  $productPurchase
      * @return \Illuminate\Http\Response
      */
-    public function show(ProductPurchase $productPurchase)
+    public function show(ProductPurchase $purchase)
     {
         return view('pharmacy.purchase.show', [
-            'productPurchase' => $productPurchase,
+            'productPurchase' => $purchase,
             'company' => auth()->user()->companyInfo,
         ]);
     }
@@ -91,7 +91,7 @@ class ProductPurchaseController extends Controller
     public function update(Request $request, ProductPurchase $productPurchase)
     {
         $request->approve($productPurchase);
-        return redirect()->route('inventory-product-purchases.index')->withSuccess('Purchase Approved');
+        return redirect()->route('product.purchases.index')->withSuccess('Purchase Approved');
     }
 
     /**
@@ -100,9 +100,9 @@ class ProductPurchaseController extends Controller
      * @param  \App\Models\Inventory\ProductPurchase  $productPurchase
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ProductPurchase $productPurchase)
+    public function destroy(ProductPurchase $purchase)
     {
-        $productPurchase->delete();
+        $purchase->delete();
         return response([
             'check' => true
         ]);
@@ -128,7 +128,8 @@ class ProductPurchaseController extends Controller
     {
         $productCodes =  ProductCode::where('company_id', company_id())
             ->where('product_id', $product->id)
-            ->get(['id', 'name']);
+            ->where('name', 'LIKE', "%{$request->name}%")
+            ->get(['id', 'name', 'quantity']);
         return response($productCodes, 200);
     }
 }
