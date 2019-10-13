@@ -4,9 +4,6 @@ namespace App\Http\Requests\Pharmacy;
 
 use App\Models\Inventory\Product;
 use App\Models\Inventory\ProductSale;
-use App\Models\InventoryProduct;
-use App\Models\InventoryProductSale;
-use App\Traits\HospitalPaymentTrait;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\DB;
 
@@ -41,17 +38,15 @@ class SalesRequest extends FormRequest
     public function persist()
     {
         return DB::transaction(function () {
-
             $input =  $this->only(
-                'invoice_id', 'patient_id', 'date', 'amount', 'discount', 'paid', 'change'
+                'invoice_id', 'party_id', 'date', 'amount', 'discount', 'change'
             );
 
             $invoice = ProductSale::create($input);
 
 
             $this->saleItems($invoice);
-
-//            $this->salePayment($invoice);
+            $this->payment($invoice);
 
             return $invoice;
 
@@ -60,23 +55,20 @@ class SalesRequest extends FormRequest
 
     private function saleItems(ProductSale $invoice)
     {
-        $items = $invoice->items;
         foreach ($this->get('product_id', []) as $key => $productId){
-            $invoice->items()->create([
+            $item = $invoice->items()->create([
                 'product_id' => $productId,
                 'product_code_id' => $this->product_code_id[$key],
-                'sales_qty' => $this->sales_qty[$key],
+                'quantity' => $this->sales_qty[$key],
                 'amount' => $this->sales_price[$key],
                 'unit_tp' => $this->item_price[$key],
             ]);
 
-            $item = $items->firstWhere('product_code_id', $this->product_code_id[$key]);
+            $item = $item->where('product_code_id', $this->product_code_id[$key])->first();
 
-//            dump($items, $this->product_code_id[$key]);
             $item->productCode()->update([
                 'quantity' => $item->productCode->quantity - $this->sales_qty[$key]
             ]);
-
 
             $product = Product::find($productId);
             $product->update([
@@ -88,13 +80,16 @@ class SalesRequest extends FormRequest
         }
     }
 
-//    private function salePayment($invoice)
-//    {
-//        $paidAmount = $this->paid_amount;
-//
-//        $paidAmount >= $this->grand_total ?
-//            $paidAmount =  $this->grand_total : false;
-//
-//        $this->payment($invoice, $paidAmount);
-//    }
+    private function payment(ProductSale $sale) : void
+    {
+        $paidAmount =  $this->paid >= $this->grand_total
+            ? $this->grand_total
+            :  $this->paid;
+
+
+        $sale->payments()->create([
+            'amount' => $paidAmount
+        ]);
+    }
+
 }

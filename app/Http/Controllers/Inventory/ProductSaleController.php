@@ -76,7 +76,7 @@ class ProductSaleController extends Controller
     public function show(ProductSale $sale)
     {
         return view('pharmacy.sales.show', [
-            'inventoryProductSale' => $sale,
+            'sale' => $sale,
             'company' => auth()->user()->companyInfo
         ]);
     }

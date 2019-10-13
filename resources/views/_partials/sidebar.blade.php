@@ -7,7 +7,22 @@
         </a>
     </li>
     @endcan
+        {{--@can('show-pharmacy-sales-menu')--}}
+            <li class="submenu">
+                <a href="javascript:void(0);">
+                    <span class="icon"><i class="fa fa-h-square"></i></span>
+                    <span class="text">Quotations </span><span class="arrow"></span>
+                </a>
+                <ul class=''>
+                    <li><a href="{{ url('quotations/create') }}">New Quotation</a></li>
+                    <li><a href="{{ url('quotations') }}">All Quotations</a></li>
+                    <li><a href="{{ url('quotations/challans') }}">All Challans</a></li>
+                    {{--<li><a href="javascript:void(0);">Customer Opening Due</a></li>--}}
+                    {{--<li><a href="javascript:void(0);">Sales Return</a></li>--}}
+                </ul>
 
+            </li>
+        {{--@endcan--}}
 
         @can('show-pharmacy-sales-menu')
             <li class="submenu">

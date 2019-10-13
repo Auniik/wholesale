@@ -74,10 +74,10 @@
             <div class="panel-heading no-print" style="height: 48px;">
                 <div class="panel-heading-btn pull-right">
                     @can('pharmacy-sales-create')
-                    <a href="/inventory-product-sales/create" class="btn btn-sm btn-success">Create New</a>
+                    <a href="/products/sales/create" class="btn btn-sm btn-success">Create New</a>
                     @endcan
                     @can('pharmacy-sales-list')
-                    <a href="/inventory-product-sales" class="btn btn-sm btn-success">All Sales</a>
+                    <a href="/products/sales" class="btn btn-sm btn-success">All Sales</a>
                     @endcan
                     <button onclick="printPage('print_body')" class="btn btn-sm btn-success"><i class="fa
                     fa-print"></i> Print</button>
@@ -98,19 +98,18 @@
                     {{--border-radius: 10px;color: #000;border:1px solid #ddd;">Sales Invoice</b></h6>--}}
                     <div class="customerInfo" style="width: 50%;float: left;">
                         {{--<h5><b><u>Invoice to : </u></b></h5>--}}
-                        <p class="patient"><b>Invoice ID : </b> {{ str_pad($inventoryProductSale->invoice_id,
+                        <p class="patient"><b>Invoice ID : </b> {{ str_pad($sale->invoice_id,
                         '3', 000,
                         STR_PAD_LEFT) }}</p>
                         {{--<p class="patient"><b>  Date : </b> {{ $inventoryProductSale->date->format('d-m-Y')--}}
                         {{--}}</p>--}}
-                        <p class="patient"><b>Name : </b> {{$inventoryProductSale->patinet->name ??
-                        $inventoryProductSale->patient_name }}</p>
+                        <p class="patient"><b>Name : </b> {{$sale->party->name}}</p>
 {{--                        <p class="patient"><b>Age : </b> {{ $inventoryProductPurchase->patient->age }} &nbsp; &nbsp; <b>Sex :</b> {{ sex($inventoryProductPurchase->patient->sex) }}</p>--}}
-                        <p class="patient"><b>Mobile : </b> {{ optional($inventoryProductSale->patient)->mobile_number }}</p>
-                        <p class="patient"><b>Sales By : </b> {{$inventoryProductSale->user->name}}</p>
+                        <p class="patient"><b>Mobile : </b> {{ optional($sale->party)->mobile_number }}</p>
+                        <p class="patient"><b>Sales By : </b> {{$sale->user->name}}</p>
                     </div>
                     <div class="customerInfo" style="width: 50%; float: right;">
-                        <p class="pull-right"><b> Date : </b> {{ $inventoryProductSale->date->format('d-m-Y')
+                        <p class="pull-right"><b> Date : </b> {{ $sale->date->format('d-m-Y')
                         }}</p>
                     </div>
                 </div>
@@ -129,43 +128,42 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($inventoryProductSale->items as $key => $item)
+                        @foreach($sale->items as $key => $item)
                             <tr>
                                 <td>{{++$key}}</td>
                                 <td >{{$item->product->name}}</td>
-                                <td class="text-center">{{number_format($item->sales_price, 2)}}</td>
-                                <td class="text-center">{{$item->sales_qty}}</td>
-                                <td align="right">{{ number_format($item->item_price , 2)}} &#x09F3;</td>
+                                <td class="text-center">{{number_format($item->amount, 2)}}</td>
+                                <td class="text-center">{{$item->quantity}}</td>
+                                <td align="right">{{ number_format($item->unit_tp , 2)}} &#x09F3;</td>
                             </tr>
                         @endforeach
 
                         <tr>
                             <td colspan="4" style="text-align: right">Discount :</td>
-                            <td style="text-align: right">{{$inventoryProductSale->discount}} &#x09F3;</td>
+                            <td style="text-align: right">{{$sale->discount}} &#x09F3;</td>
                         </tr>
                         <tr>
                             <td colspan="4" style="text-align: right">Total : </td>
-                            <td style="text-align: right">{{number_format($inventoryProductSale->totalAmount, 2)
+                            <td style="text-align: right">{{number_format($sale->totalAmount, 2)
                             }} &#x09F3;
                             </td>
                         </tr>
                         <tr>
                             <td colspan="4" style="text-align: right">Paid :</td>
-                            <td style="text-align: right">{{number_format($inventoryProductSale->paid_amount, 2)}}
+                            <td style="text-align: right">{{number_format($sale->paid + $sale->change, 2)}}
                                 &#x09F3;
                             </td>
                         </tr>
                         <tr>
                             <td colspan="4" style="text-align: right">Change :</td>
-                            <td style="text-align: right">{{number_format($inventoryProductSale->paid_amount -
-                            $inventoryProductSale->paid, 2)}}
+                            <td style="text-align: right">{{number_format($sale->change, 2)}}
                                 &#x09F3;
                             </td>
                         </tr>
                         <tr>
                             <td colspan="4" style="text-align: right">Due :</td>
                             {{--                            <th style="text-align: right">{{number_format($patientBooking->due, 2)}} &#x09F3;</th>--}}
-                            <td style="text-align: right">{{ number_format(($inventoryProductSale->due), 2) }}
+                            <td style="text-align: right">{{ number_format(($sale->due), 2) }}
                                 &#x09F3;</td>
                         </tr>
                         </tbody>

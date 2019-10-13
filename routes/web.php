@@ -196,6 +196,10 @@ Route::middleware(['auth'])->group(function () {
     });
     Route::resource('/products', 'Inventory\ProductController');
 
+    Route::prefix('quotations')->group(function () {
+        Route::resource('challans', 'Quotation\ChallanController', ['as' => 'quotation']);
+    });
+    Route::resource('quotations', 'Quotation\QuotationController');
 
 
 //    Route::resource('inventory-categories', 'Pharmacy\InventoryCategoryController');

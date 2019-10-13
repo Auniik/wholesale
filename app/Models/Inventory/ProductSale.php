@@ -2,8 +2,10 @@
 
 namespace App\Models\Inventory;
 
+use App\Models\Party;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 
 class ProductSale extends Model
 {
@@ -26,13 +28,14 @@ class ProductSale extends Model
             ]);
         });
         static::deleting(function ($model){
+            $model->items->each->delete();
+            $model->payments->each->delete();
+
             foreach ($model->items as $item){
-                $inventoryProduct = Product::where('id', $item->product_id)->first();
-                $inventoryProduct->update([
-                    'retail_quantity' => $inventoryProduct->retail_quantity + $item->retail_quantity
+                $item->productCode()->update([
+                    'quantity' => $item->productCode->quantity + $item->quantity,
                 ]);
             }
-            $model->payments->each->delete();
         });
     }
 
@@ -50,10 +53,10 @@ class ProductSale extends Model
         return $this->hasMany(ProductSaleItem::class);
     }
 
-//    public function patient()
-//    {
-//        return $this->belongsTo(Patient::class, 'patient_id');
-//    }
+    public function party()
+    {
+        return $this->belongsTo(Party::class, 'party_id');
+    }
 
     public function user()
     {
@@ -61,7 +64,7 @@ class ProductSale extends Model
     }
     public function getTotalAmountAttribute()
     {
-        return $this->subtotal - $this->discount;
+        return $this->amount - $this->discount;
     }
 
     public function payments()
