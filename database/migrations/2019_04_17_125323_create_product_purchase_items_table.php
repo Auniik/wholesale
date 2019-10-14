@@ -20,8 +20,7 @@ class CreateProductPurchaseItemsTable extends Migration
             $table->unsignedInteger('product_code_id');
             $table->integer('quantity');
             $table->double('unit_price');
-            $table->double('sales_price');
-            $table->date('expiry_date')->nullable();
+            $table->double('sales_price')->nullable();
             $table->timestamps();
 
             $table->foreign('product_id')->references('id')->on('products');

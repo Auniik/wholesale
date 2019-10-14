@@ -10,7 +10,7 @@ class Product extends Model
 {
     use AddingCompany;
     protected $fillable = [
-        'category_id',  'manufacturer_id', 'quantity',  'sales_price',
+        'category_id',  'manufacturer_id', 'quantity',  'sales_price', 'unit_price',
         'name', 'stock_limitation', 'status',
         'created_by', 'updated_by', 'company_id',
     ];

@@ -11,7 +11,7 @@ class QuotationItem extends Model
 {
     use AddingCompany;
     protected $fillable = [
-        'quotation_id', 'product_id', 'product_code_id', 'description', 'quantity',
+        'quotation_id', 'product_id', 'description', 'quantity',
         'unit_tp', 'amount', 'discount'
     ];
 
@@ -25,8 +25,9 @@ class QuotationItem extends Model
         return $this->belongsTo(Product::class, 'product_id');
     }
 
-    public function productCode()
+    public function geTotalAmountAttributes()
     {
-        return $this->belongsTo(ProductCode::class, 'product_code_id');
+        return $this->amount * $this->quantity;
     }
+
 }

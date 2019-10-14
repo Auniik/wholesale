@@ -32,8 +32,7 @@ class PurchaseRequest extends FormRequest
     {
         $rules = [
             'product_id.*' => 'required|distinct',
-//            'product_code_name.*' => "required_if:quantity.*,>,0",
-            'sales_price.*' => 'required',
+            'sales_price.*' => 'nullable',
             'quantity.*' => 'required',
             'date' => 'required',
             'discount' => 'required',
@@ -69,7 +68,6 @@ class PurchaseRequest extends FormRequest
 
     public function store()
     {
-//        dd($this->all());
         return DB::transaction(function (){
             if (!array_filter($this->get('quantity'), function($v){return $v !== null;})){
                 return false;
@@ -115,7 +113,6 @@ class PurchaseRequest extends FormRequest
             'quantity' => $this->quantity[$key],
             'unit_price' => $this->unit_tp[$key],
             'sales_price' => $this->sales_price[$key],
-            'expiry_date' => $this->expiry_date[$key],
         ];
     }
 
@@ -165,6 +162,4 @@ class PurchaseRequest extends FormRequest
             'quantity' => $item->productCode->quantity + $this->quantity[$key],
         ]);
     }
-
-
 }

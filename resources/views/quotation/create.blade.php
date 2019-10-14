@@ -4,6 +4,13 @@
         input.form-control.small-box {
             height: 25px;
         }
+
+        input.form-control.small-label-box {
+            height: 26px;
+            padding: 1.5px;
+            border: 1px solid rgba(180, 180, 180, 0.52) !important;
+        }
+
         .aside_system{
             margin-bottom: 0px;
         }
@@ -50,10 +57,9 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label class="control-label">Date :</label>
-                                                <input type="text" value="{!! date('d/m/Y');!!}"
-                                                       class="form-control" readonly autocomplete="off">
-                                                <input type="hidden" name="date" value="{!! date('Y-m-d');!!}">
+                                                <label class="control-label">Validity Date :</label>
+                                                <input type="text" name="validity" value="{!! date('d-m-Y');!!}"
+                                                       class="form-control datepicker" autocomplete="off">
                                             </div>
                                         </div>
                                     </div>
@@ -68,8 +74,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label class="control-label">Billing Address :</label>
-                                                <textarea name="shipping_address"
-                                                          class="form-control" placeholder="Billing  Address"></textarea>
+                                                <textarea readonly class="form-control" placeholder="Billing Address"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -94,8 +99,9 @@
                                         <tr>
                                             <th> Product Name </th>
                                             <th width="10%"> Available </th>
-                                            <th width="10%"> Quantity </th>
+                                            <th width="15%"> Unit TP </th>
                                             <th width="15%"> Sales Price </th>
+                                            <th width="10%"> Quantity </th>
                                             <th width="15%"> Total </th>
                                             <th width="1%">Action</th>
                                         </tr>
@@ -254,24 +260,28 @@
                 <td>
                     <span id="product_name">${ui.item.data.name}</span>
                     <input type="hidden" value="${ui.item.data.id}" name="product_id[]" id="productId"
-                    class="form-control small-box productId" autocomplete="off">
+                    class="form-control small-label-box productId" autocomplete="off">
                 </td>
                 <td>
-                    <input type="text" tabindex="-1" value="${ui.item.data.quantity}" name="available_qty[]"
-                    id="available_qty" class="form-control small-box available_qty" readonly>
+                    <input type="text" tabindex="-1" value="${ui.item.data.quantity}"
+                    id="available_qty" class="form-control small-label-box available_qty" readonly>
                 </td>
                 <td>
-                    <input type="number" min="1" value="1"  name="sales_qty[]" max="${ui.item.data.quantity}"
-                    id="sales_qty" class="form-control sales-qty small-box" autocomplete="off" placeholder="Quantity">
+                    <input type="number" name="unit_tp[]" class="form-control small-label-box"
+                        value="${parseFloat(ui.item.data.unit_price).toFixed(2)}">
                 </td>
-                 <!--td><span id="uom"></span> </td-->
                 <td>
                     <input tabindex="-1" type="text" value="${parseFloat(ui.item.data.sales_price).toFixed(2)}"
-                    name="sales_price[]" class="form-control sales-price small-box" readonly>
+                    name="sales_price[]" class="form-control sales-price small-label-box" autocomplete="off">
+                </td>
+                <td>
+                    <input type="number" min="1" value="1"  name="quantity[]" id="sales_qty" class="form-control
+                    sales-qty small-label-box" autocomplete="off" placeholder="Quantity">
                 </td>
                 <td>
                     <input tabindex="-1" type="number" min="0" value="${parseFloat(ui.item.data.sales_price).toFixed(2)}"
-                        name="item_price[]" class="form-control total-line-price small-box" autocomplete="off" readonly>
+                        name="item_price[]" class="form-control total-line-price small-label-box" autocomplete="off"
+                        readonly>
                 </td>
                 <td>
                     <button class="btn btn-xs btn-danger delete" tabindex="-1" type="button"><i class="fa fa-trash-o"></i></button>
@@ -281,10 +291,8 @@
     </script>
 
     <script>
-        $(document).on('keyup focus blur', '.sales-qty, .discount, #amountPaid', function (e) {
+        $(document).on('keyup focus blur', '.sales-price, .sales-qty, .discount, #amountPaid', function (e) {
             calculateTotal();
-
-
         });
 
 
@@ -299,9 +307,11 @@
                 totalDrugPrice = 0, amount = 0;
             $.each(rows, function (i, row) {
                 let quantity = $(row).find('.sales-qty').val(),
-                    salesPrice = $(row).find('.sales-price').val(),
-                    totalDrugPrice = (quantity * salesPrice);
-                if(!quantity || !salesPrice) quantity = 0, salesPrice = 0;
+                    salesPrice = $(row).find('.sales-price').val();
+
+                if (!quantity)  quantity = 0;
+                if(!salesPrice) salesPrice = 0;
+                let  totalDrugPrice = (quantity * salesPrice);
                 $(row).find('.total-line-price').val(parseFloat(totalDrugPrice).toFixed(2));
                 amount += totalDrugPrice;
             });
@@ -310,13 +320,14 @@
         }
 
         function discount(stotal){
-            let discount = parseFloat($('.discount').val()),
+            let discountAmount = parseFloat($('.discount').val()),
                 subTotal = parseFloat(stotal);
-            if (discount > subTotal){
+            if(!discountAmount) discountAmount = 0;
+            if (discountAmount > subTotal){
                 $('.discount').val(0);
                 alert('You can\'t pay more than grand total.');
             }
-            let total = (subTotal -  discount).toFixed(2)
+            let total = (subTotal -  discountAmount).toFixed(2)
             $('#total').val(total);
             return total;
         }

@@ -43,7 +43,9 @@ class QuotationController extends Controller
      */
     public function store(QuotationRequest $request)
     {
-        $request->persist();
+        $invoice = $request->persist();
+        return redirect()->route('quotations.show', $invoice->id)
+            ->withSuccess('Quotation Created Successfully!');
     }
 
     /**
@@ -54,7 +56,9 @@ class QuotationController extends Controller
      */
     public function show(Quotation $quotation)
     {
-        //
+        return view('quotation.show', compact('quotation'), [
+            'company' => auth()->user()->companyInfo
+        ]);
     }
 
     /**

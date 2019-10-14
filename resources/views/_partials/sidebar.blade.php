@@ -64,11 +64,11 @@
                     @endcan
                     @can('inventory-settings-list')
                         {{--<li><a href="{{ url('inventory-categories') }}">Product Categories</a></li>--}}
-                        <li><a href="{{ url('categories') }}">Create Categories</a></li>
+                        <li><a href="{{ url('products/categories') }}">Create Categories</a></li>
                         <li><a href="{{ url('products/codes') }}">Create Codes</a></li>
                         {{--<li><a href="{{ url('inventory-brands') }}">Create Manufacturer</a></li>--}}
-                        <li><a href="{{ url('manufacturers') }}">Create Manufacturer</a></li>
-                        <li><a href="{{ url('barcodes') }}">Create Barcodes</a></li>
+                        <li><a href="{{ url('products/manufacturers') }}">Create Manufacturer</a></li>
+                        <li><a href="{{ url('products/barcodes') }}">Create Barcodes</a></li>
 {{--                        <li><a href="{{ url('inventory-units') }}">Unit Management</a></li>--}}
                     @endcan
                 </ul>

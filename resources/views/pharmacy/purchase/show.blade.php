@@ -114,7 +114,6 @@
                             <th>Quantity</th>
                             <th>Unit TP</th>
                             <th>Sales Price</th>
-                            <th class="text-center">Expiry Date</th>
                             <th width="15%" style="text-align:right">Total TP (&#x09F3;)</th>
                         </tr>
                         </thead>
@@ -127,30 +126,29 @@
                             <td>{{$item->quantity}}</td>
                             <td>{{$item->unit_price}}</td>
                             <td>{{$item->sales_price}}</td>
-                            <td class="text-center">{{optional($item->expiry_date)->format('d-m-Y')}}</td>
                             <td align="right">{{ number_format($item->price , 2)}} &#x09F3;</td>
                         </tr>
                         @endforeach
 
-                        <tr>
-                            <td colspan="7" style="text-align: right">Discount =</td>
+                        <tr hidden>
+                            <td colspan="6" style="text-align: right" >Discount =</td>
                             <th style="text-align: right">{{$productPurchase->discount}} &#x09F3;</th>
                         </tr>
                         <tr>
-                            <td colspan="7" style="text-align: right">Total = </td>
+                            <td colspan="6" style="text-align: right">Total = </td>
                             <th style="text-align: right">{{number_format($productPurchase->totalAmount, 2)
                             }} &#x09F3;
                             </th>
                         </tr>
                         <tr>
-                            <td colspan="7" style="text-align: right">Paid =</td>
+                            <td colspan="6" style="text-align: right">Paid =</td>
                             <th style="text-align: right">{{number_format($productPurchase->paid ?
                             $productPurchase->paid :
                             $productPurchase->paid_amount, 2)}}
                                 &#x09F3;</th>
                         </tr>
                         <tr>
-                            <td colspan="7" style="text-align: right">Due =</td>
+                            <td colspan="6" style="text-align: right">Due =</td>
                             {{--                            <th style="text-align: right">{{number_format($patientBooking->due, 2)}} &#x09F3;</th>--}}
                             <th style="text-align: right">{{ number_format(($productPurchase->due), 2) }}
                                 &#x09F3;</th>

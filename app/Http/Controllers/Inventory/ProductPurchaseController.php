@@ -57,7 +57,7 @@ class ProductPurchaseController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Inventory\ProductPurchase  $productPurchase
+     * @param ProductPurchase $purchase
      * @return \Illuminate\Http\Response
      */
     public function show(ProductPurchase $purchase)

@@ -20,9 +20,9 @@ class CreateQuotationItemsTable extends Migration
             $table->unsignedInteger('product_code_id');
             $table->text('description')->nullable();
             $table->integer('quantity');
-            $table->double('unit_tp', 10, 2);
-            $table->double('amount', 10, 2);
-            $table->double('discount', 10, 2);
+            $table->double('unit_tp', 10, 2)->default(0);
+            $table->double('amount', 10, 2)->default(0);
+            $table->double('discount', 10, 2)->default(0);
             $table->timestamps();
 
             $table->foreign('quotation_id')->references('id')->on('quotations');
