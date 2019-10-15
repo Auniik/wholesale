@@ -196,11 +196,16 @@ Route::middleware(['auth'])->group(function () {
     });
     Route::resource('/products', 'Inventory\ProductController');
 
-    Route::prefix('quotations')->group(function () {
-        Route::resource('challans', 'Quotation\ChallanController', ['as' => 'quotation']);
-    });
+    
     Route::resource('quotations', 'Quotation\QuotationController');
+    Route::get('quotations/{quotation}/challans/{challan}/invoice', 'Quotation\QuotationController@invoice');
 
+    Route::get('quotations/{quotation}/challans/create', 'Quotation\ChallanController@create')->name('challans.create');
+    Route::get('quotations/{quotation}/challans', 'Quotation\ChallanController@index')->name('challans.index');
+    Route::POST('quotations/{quotation}/challans', 'Quotation\ChallanController@store')->name('challans.store');
+    Route::get('quotations/{quotation}/challans/{challan}', 'Quotation\ChallanController@show')->name('challans.show');
+    Route::patch('quotations/{quotation}/challans/{challan}/edit', 'Quotation\ChallanController@edit')->name('challans.update');
+    Route::DELETE('quotations/{quotation}/challans/{challan}', 'Quotation\ChallanController@destroy')->name('challans.destroy');
 
 //    Route::resource('inventory-categories', 'Pharmacy\InventoryCategoryController');
 //    Route::resource('medicine-types', 'Pharmacy\MedicineTypeController');

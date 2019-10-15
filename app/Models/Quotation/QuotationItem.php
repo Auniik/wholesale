@@ -25,9 +25,9 @@ class QuotationItem extends Model
         return $this->belongsTo(Product::class, 'product_id');
     }
 
-    public function geTotalAmountAttributes()
+    public function getTotalAmountAttribute()
     {
-        return $this->amount * $this->quantity;
+        return $this->quantity * $this->amount;
     }
 
 }

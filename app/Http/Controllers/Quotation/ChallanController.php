@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Quotation;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Quotation\ChallanRequest;
 use App\Models\Quotation\Challan;
+use App\Models\Quotation\Quotation;
 use Illuminate\Http\Request;
 
 class ChallanController extends Controller
@@ -16,18 +18,25 @@ class ChallanController extends Controller
     public function index()
     {
         return view('quotation.challan.index', [
-//            'challans' => Challan::where('ch')
+            'challans' => Challan::where('company_id', company_id())->get()
         ]);
     }
 
     /**
      * Show the form for creating a new resource.
      *
+     * @param Quotation $quotation
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Quotation $quotation)
     {
-        //
+        $challan_id = Challan::where('date', date('Y-m-d'))->value('invoice_id');
+        $challan_id ? $challan_id += 1 : $challan_id = date('ymd') . 1;
+
+        return view('quotation.challan.create', [
+            'quotation' => $quotation,
+            'challan_id' => $challan_id
+        ]);
     }
 
     /**
@@ -36,9 +45,11 @@ class ChallanController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ChallanRequest $request)
     {
-        //
+        $challan = $request->persist();
+        return redirect()->route('challans.show', [$challan->quotation->id, $challan])
+            ->withSuccess('Challan Created Successfully!');
     }
 
     /**

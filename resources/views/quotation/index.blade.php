@@ -43,13 +43,15 @@
                                     <td>{{$quotation->shipping_address}}</td>
                                     <td>{{number_format($quotation->amount, 2)}}</td>
                                     <td>{{number_format($quotation->discount, 2)}}</td>
+                                    <td><a href="/quotations/{{$quotation->id}}/challans/create" class="btn
+                                    btn-xs btn-warning" data-toggle="modal"><i class="fa fa-cart-plus"></i></a></td>
                                     <td><a href="{{route('quotations.edit', $quotation->id)}}" class="btn
                                     btn-xs btn-success" data-toggle="modal"><i class="fa fa-pencil-square-o"></i></a></td>
                                     <td>
-                                        @can('pharmacy-purchase-delete')
+{{--                                        @can('pharmacy-purchase-delete')--}}
                                             <a href="{{route('quotations.destroy', $quotation->id)}}" class="btn
                                         btn-xs btn-danger deletable"><i class="fa fa-trash-o"></i></a>
-                                        @endcan
+                                        {{--@endcan--}}
                                     </td>
                                 </tr>
                             @endforeach
