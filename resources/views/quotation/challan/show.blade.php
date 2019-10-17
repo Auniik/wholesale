@@ -1,5 +1,5 @@
 @extends('layout.app')
-@section('title', 'Quotation')
+@section('title', 'Challan')
 @push('style')
     {{--<link href="{{url('/')}}/css/tailwindcss.css" rel="stylesheet">--}}
     <style>
@@ -47,12 +47,15 @@
     </style>
 @endpush
 @section('content')
+
     <div class="invoice">
         <div class="panel panel-default" style="margin-bottom: 0px;">
             <div class="panel-heading no-print" style="height: 48px;">
                 <div class="panel-heading-btn pull-right">
                     @can('pharmacy-purchase-create')
-                        <a href="/quotations/create" class="btn btn-sm btn-success">Create New</a>
+                        <a href="/quotations/{{$quotation->id}}/challans/create" class="btn
+                        btn-sm
+                        btn-success">Create New</a>
                     @endcan
                     @can('pharmacy-purchase-list')
                         <a href="/quotations" class="btn btn-sm btn-success">All Quotations</a>
@@ -72,7 +75,10 @@
                         <p>{{ $company->mobile_no }}, {{ $company->email}}</p>
                     </div>
                     <h6 style="width: 100%;text-align: center;margin-top: 15px;"><b style="padding: 10px 20px;
-                    border-radius: 10px;color: #000;border:1px solid #ddd;">QUOTATION</b></h6><hr>
+                    border-radius: 10px;color: #000;border:1px solid #ddd;">CHALLAN</b>
+                        <br>
+
+                    </h6><hr>
                     <div class="customerInfo" style="width: 50%;float: left;">
                         <h5><b><u>Party's Information : </u></b></h5>
                         <p class="patient"><b>ID : </b> {{ $quotation->party->id }}</p>
@@ -84,15 +90,11 @@
                         <table class="table table-bordered">
                             <tr>
                                 <td> Invoice ID : </td>
-                                <td>{!! $quotation->invoice_id !!}</td>
+                                <td>{!! $challan->invoice_id !!}</td>
                             </tr>
                             <tr>
                                 <td> Quotation Date : </td>
-                                <td>{{ $quotation->created_at->format('d-m-Y') }}</td>
-                            </tr>
-                            <tr>
-                                <td> Validity Date : </td>
-                                <td>{{ $quotation->validity->format('d-m-Y') }}</td>
+                                <td>{{ $challan->date->format('d-m-Y') }}</td>
                             </tr>
 
                         </table>
@@ -109,40 +111,27 @@
                         <thead>
                         <tr>
                             <th width="1%">SL</th>
-                            <th width="25%">Product Name</th>
+                            <th width="25%">DESCRIPTION OF GOODS</th>
                             <th>Quantity</th>
-                            <th>Unit Price</th>
-                            <th width="15%" style="text-align:right">Total TP (&#x09F3;)</th>
+                            <th>UOM</th>
+                            <th>Condition</th>
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($quotation->items as $key => $item)
+                        @foreach($challan->items as $key => $item)
                             <tr>
                                 <td>{{++$key}}</td>
-                                <td >{{$item->product->name}}</td>
+                                <td >
+                                    <strong>{{$item->quotationItem->product->name}}</strong>
+                                    <p><small>Product Code: {{$item->productCode->name}}</small></p>
+                                </td>
                                 <td>{{$item->quantity}}</td>
-                                <td>{{$item->amount}}</td>
-                                <td align="right">{{ number_format($item->totalAmount , 2)}} &#x09F3;</td>
+                                <td>Nos</td>
+                                <td>GOOD</td>
                             </tr>
                         @endforeach
-
-                        <tr hidden>
-                            <td colspan="4" style="text-align: right" >Discount =</td>
-                            <th style="text-align: right">{{$quotation->discount}} &#x09F3;</th>
-                        </tr>
-                        <tr>
-                            <td colspan="4" style="text-align: right">Total = </td>
-                            <th style="text-align: right">{{number_format($quotation->totalAmount, 2)
-                            }} &#x09F3;
-                            </th>
-                        </tr>
                         </tbody>
                     </table>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <h5>Amount : <span> {{MyHelper::taka($quotation->amount) . ''}}</span></h5>
-                    </div>
                 </div>
             </div>
             <div class="print-footer" style="margin-top: 40px;overflow: hidden;width: 100%;padding: 0 10px;">

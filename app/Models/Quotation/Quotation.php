@@ -9,7 +9,36 @@ use Illuminate\Database\Eloquent\Model;
 
 class Quotation extends Model
 {
-    use AddingCompany;
+    public static function boot()
+    {
+        parent::boot();
+
+        if (!app()->runningInConsole()){
+            static::creating(function ($model){
+                /** @var User $user */
+                $user = auth()->user();
+                $model->fill([
+                    'company_id' => $user->fk_company_id,
+                    'created_by' => $user->id
+                ]);
+            });
+
+            static::updating(function ($model){
+                $model->fill([
+                    'updated_by' => auth()->id()
+                ]);
+            });
+
+            static::deleting(function ($model){
+                $model->items->each->delete();
+                foreach ($model->challans as $challan){
+                    $challan->items->each->delete();
+                }
+                $model->challans->each->delete();
+            });
+        }
+
+    }
     protected $fillable = [
         'party_id', 'created_by', 'company_id', 'updated_at ', 'updated_by', 'bank_id', 'validity', 'shipping_address',
         'amount', 'discount', 'invoice_id'
@@ -17,11 +46,11 @@ class Quotation extends Model
 
     protected function setValidityAttribute($date)
     {
-        $this->attributes['validity'] =  $date;
+        $this->attributes['validity'] =  date('Y-m-d', strtotime($date));
     }
 
     protected $dates = [
-        'validity'. 'created_at'
+        'validity', 'created_at'
     ];
 
     public function items()
@@ -52,6 +81,9 @@ class Quotation extends Model
     {
         return $this->amount - $this->discount;
     }
+
+
+
 
 
 }

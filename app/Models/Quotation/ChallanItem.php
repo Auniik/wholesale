@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class ChallanItem extends Model
 {
     protected $fillable = [
-        'challan_id', 'product_id', 'product_code_id', 'quantity'
+        'challan_id', 'quotation_item_id', 'product_code_id', 'quantity'
     ];
 
     public function productCode()
@@ -17,21 +17,25 @@ class ChallanItem extends Model
         return $this->belongsTo(ProductCode::class, 'product_code_id');
     }
 
-    public function product()
+    public function quotationItem()
     {
-        return $this->belongsTo(Product::class, 'product_id');
+        return $this->belongsTo(QuotationItem::class, 'quotation_item_id');
     }
 
-    public function inventoryUpdate($quantity)
-    {
-        $this->productCode->update([
-            'quantity' => $this->productCode->quantity - $quantity
-        ]);
+//    public function itemsDelivered()
+//    {
+//        return $this->hasMany(ChallanItemInventory::class, 'challan_item_id');
+//    }
 
-        $this->product->update([
-            'quantity' => $this->product->quantity - $quantity
-        ]);
+//    public function deliveredQuantity()
+//    {
+//        return $this->itemsDelivered->sum('quantity');
+//    }
+//
+//    public function getChallanableQuantityAttribute()
+//    {
+//        return $this->quantity - $this->itemsDelivered->sum('quantity');
+//    }
 
 
-    }
 }

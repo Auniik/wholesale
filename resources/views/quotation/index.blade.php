@@ -7,8 +7,7 @@
                     <div class="panel-heading">
                         @can('pharmacy-purchase-create')
                             <div class="panel-heading-btn pull-right">
-                                <a class="btn btn-primary btn-sm" href="/quotations/create">Add New
-                                    Quotation</a>
+                                <a class="btn btn-primary btn-sm" href="/quotations/create">Add New Quotation</a>
                             </div>
                         @endcan
                         <h4 class="panel-title">All Quotations</h4>
@@ -23,7 +22,7 @@
                                 <th>Party Name</th>
                                 <th>Ship to</th>
                                 <th>Total Amount</th>
-                                <th>Discount</th>
+                                {{--<th>Discount</th>--}}
                                 <th width="8%" colspan="3" class="text-center">Action</th>
                             </tr>
                             </thead>
@@ -38,11 +37,11 @@
                                         }}">{{$quotation->invoice_id}}</a>
                                         {{--@endcan--}}
                                     </td>
-                                    <td>{{$quotation->date}}</td>
+                                    <td>{{$quotation->created_at->format('d-m-Y')}}</td>
                                     <td>{{$quotation->party->name}}</td>
                                     <td>{{$quotation->shipping_address}}</td>
                                     <td>{{number_format($quotation->amount, 2)}}</td>
-                                    <td>{{number_format($quotation->discount, 2)}}</td>
+                                    {{--<td>{{number_format($quotation->discount, 2)}}</td>--}}
                                     <td><a href="/quotations/{{$quotation->id}}/challans/create" class="btn
                                     btn-xs btn-warning" data-toggle="modal"><i class="fa fa-cart-plus"></i></a></td>
                                     <td><a href="{{route('quotations.edit', $quotation->id)}}" class="btn

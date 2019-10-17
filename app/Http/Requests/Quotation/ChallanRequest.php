@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Quotation;
 
 use App\Models\Quotation\Challan;
+use App\Models\Quotation\ChallanItem;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\DB;
 
@@ -25,7 +26,7 @@ class ChallanRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'quantity.*' => 'lte:available_qty.*',
             'transport_mode' => 'required|max:160',
             'shipping_address' => 'required|max:192',
@@ -34,15 +35,29 @@ class ChallanRequest extends FormRequest
             'date' => 'required',
             'invoice_id' => 'required',
         ];
+        foreach ($this->get('product_id', []) as $key => $product){
+            $rules += [
+                "product_code_name.{$key}" => $this->checkCode($key)
+            ];
+        }
+        return $rules;
+    }
+    private function checkCode($key) : string
+    {
+        if($this->quantity[$key] > 0){
+            return 'required';
+        }
+        return 'nullable';
     }
 
     public function persist()
     {
-        DB::transaction(function (){
+        return DB::transaction(function (){
             $challan = $this->makeInvoice();
 
-            $test = $this->addItems($challan);
+            $this->addItems($challan);
 
+            return $challan;
         });
     }
 
@@ -54,19 +69,25 @@ class ChallanRequest extends FormRequest
 
     private function addItems(Challan $challan)
     {
+
         foreach ($this->quantity as $key => $quantity){
             if ($quantity){
                 $item = $challan->items()->create([
-                    'product_id' => $this->product_id[$key],
+                    'quotation_item_id' => $this->quotation_item_id[$key],
                     'product_code_id' => $this->product_code_id[$key],
                     'quantity' => $this->quantity[$key],
                 ]);
+                /** @var ChallanItem $item */
+                $item->productCode()->update([
+                    'quantity' => $item->productCode->quantity - $quantity
+                ]);
+                $item->quotationItem->product()->update([
+                    'quantity' => $item->quotationItem->product->quantity - $quantity
+                ]);
 
-                $item->inventoryUpdate($quantity);
+//                dd($item);
 
-//                $item->product()->update([
-//                    'quantity' => $challan->product - $this->quantity[$key],
-//                ]);
+
             }
         }
     }

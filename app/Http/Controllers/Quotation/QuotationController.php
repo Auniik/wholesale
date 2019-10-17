@@ -12,12 +12,14 @@ class QuotationController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Quotation $quotation
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
         return view('quotation.index', [
-            'quotations' => Quotation::where('company_id', company_id())->paginate()
+            'quotations' => Quotation::where('company_id', company_id())
+                ->paginate()
         ]);
     }
 

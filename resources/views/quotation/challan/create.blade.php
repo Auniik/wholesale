@@ -82,17 +82,19 @@
                                         <tbody id="product-details">
                                         <input type="hidden" value="{{$quotation->id}}" name="quotation_id">
                                         @foreach($quotation->items as $item)
+
                                         <tr class="product-row">
                                             <td>
+                                                <input type="hidden" class="quotation_item_id" value="{{$item->id}}"
+                                                       name="quotation_item_id[]">
                                                 <span id="product_name">{{$item->product->name}}</span>
                                                 <input type="hidden" value="{{$item->product_id}}" name="product_id[]"
-                                                       id="productId" class="form-control small-label-box productId"
-                                                       autocomplete="off">
+                                                       id="productId" class="productId">
                                             </td>
                                             <td>
-                                                <input type="text" tabindex="-1"
+                                                <input type="text" tabindex="-1" name="product_code_name[]"
                                                        id="product_code_name" class="form-control small-label-box
-                                                       product-code-names"  >
+                                                       product-code-names">
                                                 <input type="hidden" id="product_code_id" name="product_code_id[]"
                                                        class="product_code_id">
                                             </td>
@@ -102,9 +104,8 @@
                                                        available_qty" readonly>
                                             </td>
                                             <td>
-                                                <input type="number" min="1" value="{{$item->quantity}}"
-                                                       name="quantity[]"
-                                                       id="sales_qty" class="form-control
+                                                <input type="number" min="0" value="{{$item->availableQty}}"
+                                                       name="quantity[]" id="sales_qty" class="form-control
                                                     sales-qty small-label-box" autocomplete="off" placeholder="Quantity">
                                             </td>
                                         </tr>
@@ -210,7 +211,9 @@
                     $(row).find('.product-code-names').attr('readonly', true).removeAttr('name')
                     $(row).find('.sales-qty').attr('readonly', true).removeAttr('name')
                     $(row).find('.available_qty').removeAttr('name')
+                    $(row).find('.product_code_id').removeAttr('name')
                     $(row).find('.productId').removeAttr('name')
+                    $(row).find('.quotation_item_id').removeAttr('name')
                 }
             })
         })

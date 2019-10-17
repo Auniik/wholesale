@@ -15,10 +15,12 @@ class ChallanController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Quotation $quotation)
     {
         return view('quotation.challan.index', [
-            'challans' => Challan::where('company_id', company_id())->get()
+            'challans' => Challan::where('company_id', company_id())
+                ->where('quotation_id', $quotation->id)
+                ->paginate()
         ]);
     }
 
@@ -48,6 +50,7 @@ class ChallanController extends Controller
     public function store(ChallanRequest $request)
     {
         $challan = $request->persist();
+
         return redirect()->route('challans.show', [$challan->quotation->id, $challan])
             ->withSuccess('Challan Created Successfully!');
     }
@@ -55,21 +58,25 @@ class ChallanController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Quotation\Challan  $challan
+     * @param Quotation $quotation
+     * @param  \App\Models\Quotation\Challan $challan
      * @return \Illuminate\Http\Response
      */
-    public function show(Challan $challan)
+    public function show(Quotation $quotation, Challan $challan)
     {
-        //
+        return view('quotation.challan.show', compact('challan', 'quotation'), [
+            'company' => auth()->user()->companyInfo
+        ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Quotation\Challan  $challan
-     * @return \Illuminate\Http\Response
+     * @param Quotation $quotation
+     * @param  \App\Models\Quotation\Challan $challan
+     * @return void
      */
-    public function edit(Challan $challan)
+    public function edit(Quotation $quotation, Challan $challan)
     {
         //
     }
@@ -77,11 +84,12 @@ class ChallanController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Quotation\Challan  $challan
-     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request $request
+     * @param Quotation $quotation
+     * @param  \App\Models\Quotation\Challan $challan
+     * @return void
      */
-    public function update(Request $request, Challan $challan)
+    public function update(Request $request,  Challan $challan)
     {
         //
     }
@@ -94,6 +102,9 @@ class ChallanController extends Controller
      */
     public function destroy(Challan $challan)
     {
-        //
+        $challan->delete();
+        return response([
+            'check' => true
+        ]);
     }
 }

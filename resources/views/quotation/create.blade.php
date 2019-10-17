@@ -28,8 +28,8 @@
                     <div class="panel-heading">
 {{--                        @can('pharmacy-sales-list')--}}
                             <div class="panel-heading-btn pull-right">
-                                <a class="btn btn-success btn-sm" href="{{route('product.sales.index')}}">
-                                    All Added Product
+                                <a class="btn btn-success btn-sm" href="{{route('quotations.index')}}">
+                                    All Quotations
                                 </a>
                             </div>
                         {{--@endcan--}}
