@@ -16,7 +16,8 @@
                 <ul class=''>
                     <li><a href="{{ url('quotations/create') }}">New Quotation</a></li>
                     <li><a href="{{ url('quotations') }}">All Quotations</a></li>
-                    <li><a href="{{ url('quotations/challans') }}">All Challans</a></li>
+                    <li><a href="{{ url('challans') }}">All Challans</a></li>
+                    <li><a href="{{ url('invoices') }}">All Invoices</a></li>
                     {{--<li><a href="javascript:void(0);">Customer Opening Due</a></li>--}}
                     {{--<li><a href="javascript:void(0);">Sales Return</a></li>--}}
                 </ul>

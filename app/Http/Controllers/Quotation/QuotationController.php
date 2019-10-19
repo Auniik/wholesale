@@ -99,4 +99,27 @@ class QuotationController extends Controller
             'check' => true
         ]);
     }
+
+    /**
+     * @param Quotation $quotation
+     * @return string
+     */
+    public function invoice(Quotation $quotation)
+    {
+        return view('quotation.invoice', [
+            'company' => auth()->user()->companyInfo,
+            'quotation' => $quotation
+        ]);
+    }
+
+    public function invoices()
+    {
+        return view('quotation.invoices', [
+            'company' => auth()->user()->companyInfo,
+            'quotations' => Quotation::whereHas('challans', function ($query){
+                return $query;
+            })
+            ->where('company_id', company_id())->paginate()
+        ]);
+    }
 }

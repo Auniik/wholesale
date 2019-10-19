@@ -3,7 +3,6 @@
 namespace App\Models\Quotation;
 
 use App\Models\Party;
-use App\Traits\AddingCompany;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 
@@ -58,6 +57,19 @@ class Quotation extends Model
         return $this->hasMany(QuotationItem::class, 'quotation_id');
     }
 
+    public function getChallanItemsAttribute()
+    {
+        $items = ChallanItem::query()
+            ->with('productCode.product', 'quotationItem')
+            ->whereHas('challan.quotation', function($q){
+                $q->where('id', $this->id);
+            })->selectRaw('sum(challan_items.quantity) as quantity,
+            challan_items.quotation_item_id, challan_items.product_code_id')
+            ->groupBy('product_code_id');
+        return $items->get();
+    }
+
+
     public function challans()
     {
         return $this->hasMany(Challan::class, 'quotation_id');
@@ -81,6 +93,10 @@ class Quotation extends Model
     {
         return $this->amount - $this->discount;
     }
+
+
+
+
 
 
 

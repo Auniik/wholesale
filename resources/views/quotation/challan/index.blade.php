@@ -33,7 +33,7 @@
                                     <td>{{$sl++}}</td>
                                     <td>
                                         {{--@can('pharmacy-purchase-show')--}}
-                                        <a  href="{{route('challans.show', [$challan->quotation->id, $challan->id] )
+                                        <a  href="{{route('challans.show',$challan->id)
                                         }}">{{$challan->invoice_id}}</a>
                                         {{--@endcan--}}
                                     </td>
@@ -42,13 +42,13 @@
                                     <td>{{$challan->shipping_address}}</td>
                                     <td>{{$challan->transport_mode}}</td>
                                     <td>
-                                        <a href="{{route('challans.edit', [$challan->quotation->id, $challan->id] )
+                                        <a href="{{route('challans.edit', $challan->id)
                                         }}" class="btn btn-xs btn-success"><i class="fa fa-pencil-square-o"></i>
                                         </a>
                                     </td>
                                     <td>
                                         {{--                                        @can('pharmacy-purchase-delete')--}}
-                                        <a href="{{route('challans.destroy', [$challan->id]) }}"
+                                        <a href="{{route('challans.destroy', $challan->id) }}"
                                            class="btn btn-xs btn-danger deletable">
                                             <i class="fa fa-trash-o"></i>
                                         </a>

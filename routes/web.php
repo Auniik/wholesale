@@ -198,15 +198,20 @@ Route::middleware(['auth'])->group(function () {
 
     
     Route::resource('quotations', 'Quotation\QuotationController');
+    Route::get('challans', 'Quotation\ChallanController@challans');
     Route::get('quotations/{quotation}/challans/{challan}/invoice', 'Quotation\QuotationController@invoice');
 
     Route::get('quotations/{quotation}/challans/create', 'Quotation\ChallanController@create')->name('challans.create');
     Route::get('quotations/{quotation}/challans', 'Quotation\ChallanController@index')->name('challans.index');
     Route::POST('quotations/{quotation}/challans', 'Quotation\ChallanController@store')->name('challans.store');
-    Route::get('quotations/{quotation}/challans/{challan}', 'Quotation\ChallanController@show')->name('challans.show');
-    Route::get('quotations/{quotation}/challans/{challan}/edit', 'Quotation\ChallanController@edit')->name('challans.edit');
+    Route::get('quotations/challans/{challan}', 'Quotation\ChallanController@show')->name('challans.show');
+    Route::get('quotations/challans/{challan}/edit', 'Quotation\ChallanController@edit')->name('challans.edit');
     Route::DELETE('quotations/challans/{challan}', 'Quotation\ChallanController@destroy')->name('challans.destroy');
-    Route::PATCH('quotations/{quotation}/challans/{challan}', 'Quotation\ChallanController@update')->name('challans.update');
+    Route::PATCH('quotations/challans/{challan}', 'Quotation\ChallanController@update')->name('challans.update');
+    Route::get('quotations/{quotation}/invoice', 'Quotation\QuotationController@invoice')->name('quotation.invoice');
+    Route::get('invoices', 'Quotation\QuotationController@invoices');
+
+
 
 //    Route::resource('inventory-categories', 'Pharmacy\InventoryCategoryController');
 //    Route::resource('medicine-types', 'Pharmacy\MedicineTypeController');

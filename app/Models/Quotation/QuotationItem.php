@@ -30,25 +30,13 @@ class QuotationItem extends Model
         return $this->quantity * $this->amount;
     }
 
-//    public function itemsDelivered()
-//    {
-//        return $this->hasMany(ChallanItemInventory::class, 'quotation_id');
-//    }
-//
-//    public function deliveredQuantity()
-//    {
-//        return $this->itemsDelivered->sum('quantity');
-//    }
-//
-//    public function getChallanableQuantityAttribute()
-//    {
-//        return $this->quantity - $this->itemsDelivered->sum('quantity');
-//    }
 
     public function challanItems()
     {
         return $this->hasMany(ChallanItem::class, 'quotation_item_id');
     }
+
+
     public function getDeliveredQtyAttribute()
     {
         return $this->challanItems->sum('quantity') ?? 0;
@@ -57,6 +45,11 @@ class QuotationItem extends Model
     public function getAvailableQtyAttribute()
     {
         return $this->quantity - $this->deliveredQty;
+    }
+
+    public function getDeliveredAmountAttribute()
+    {
+        return $this->deliveredQty * $this->amount;
     }
 
 }

@@ -25,7 +25,7 @@
 {{--                        @can('pharmacy-sales-list')--}}
                         <div class="panel-heading-btn pull-right">
                             <a class="btn btn-success btn-sm" href="{{route('challans.index', $quotation)}}">
-                                All Added Product
+                                All Added Challans
                             </a>
                         </div>
                         {{--@endcan--}}
@@ -39,11 +39,11 @@
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label class="control-label">Customer Name :</label>
+                                                <label class="control-label">Party Name :</label>
                                                 <input type="text" name="party_name" id="party_name"
-                                                       placeholder="Customer's Name"
+                                                       placeholder="Party Name"
                                                        value="{{$quotation->party->name}}" class="form-control"
-                                                       required>
+                                                       required readonly>
                                                 <input type="hidden" name="party_id"
                                                        value="{{$quotation->party_id}}" id="party_id">
                                             </div>
@@ -51,7 +51,9 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label class="control-label">Invoice ID #</label>
-                                                <input type="text" tabindex="-1" class="form-control" id="invoice_id" placeholder="Invoice ID" name="invoice_id" value="{{$challan_id+1}}" readonly>
+                                                <input type="text" tabindex="-1" class="form-control" id="invoice_id"
+                                                       placeholder="Invoice ID" name="invoice_id"
+                                                       value="{{$challan_id+1}}"  readonly>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -67,7 +69,7 @@
                                 </div>
                             </div>
 
-                            <div class="row"> <br>
+                            <div class="row">
                                 <div class="col-md-9">
                                     <br>
                                     <table class="table table-bordered table-hover" id="table_auto">
@@ -94,7 +96,7 @@
                                             <td>
                                                 <input type="text" tabindex="-1" name="product_code_name[]"
                                                        id="product_code_name" class="form-control small-label-box
-                                                       product-code-names">
+                                                       product-code-names" placeholder="Search Codes">
                                                 <input type="hidden" id="product_code_id" name="product_code_id[]"
                                                        class="product_code_id">
                                             </td>
@@ -204,9 +206,10 @@
             let rows = $('.product-row');
 
             $.each(rows, (i, row) => {
-                let availableQty = parseFloat($(row).find('.available_qty').val());
+                let availableQuantity = parseFloat($(row).find('.available_qty').val());
+                let challanQuantity = parseFloat($(row).find('.sales-qty').val());
 
-                if (availableQty === 0) {
+                if (availableQuantity === 0 || challanQuantity === 0) {
 
                     $(row).find('.product-code-names').attr('readonly', true).removeAttr('name')
                     $(row).find('.sales-qty').attr('readonly', true).removeAttr('name')

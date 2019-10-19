@@ -13,6 +13,7 @@ class ChallanController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Quotation $quotation
      * @return \Illuminate\Http\Response
      */
     public function index(Quotation $quotation)
@@ -20,6 +21,14 @@ class ChallanController extends Controller
         return view('quotation.challan.index', [
             'challans' => Challan::where('company_id', company_id())
                 ->where('quotation_id', $quotation->id)
+                ->paginate()
+        ]);
+    }
+
+    public function challans()
+    {
+        return view('quotation.challan.index', [
+            'challans' => Challan::where('company_id', company_id())
                 ->paginate()
         ]);
     }
@@ -51,7 +60,7 @@ class ChallanController extends Controller
     {
         $challan = $request->persist();
 
-        return redirect()->route('challans.show', [$challan->quotation->id, $challan])
+        return redirect()->route('challans.show', [$challan])
             ->withSuccess('Challan Created Successfully!');
     }
 
@@ -62,10 +71,11 @@ class ChallanController extends Controller
      * @param  \App\Models\Quotation\Challan $challan
      * @return \Illuminate\Http\Response
      */
-    public function show(Quotation $quotation, Challan $challan)
+    public function show(Challan $challan)
     {
-        return view('quotation.challan.show', compact('challan', 'quotation'), [
-            'company' => auth()->user()->companyInfo
+        return view('quotation.challan.show', compact('challan'), [
+            'company' => auth()->user()->companyInfo,
+            'quotation' => $challan->quotation
         ]);
     }
 
@@ -76,7 +86,7 @@ class ChallanController extends Controller
      * @param  \App\Models\Quotation\Challan $challan
      * @return void
      */
-    public function edit(Quotation $quotation, Challan $challan)
+    public function edit(Challan $challan)
     {
         //
     }

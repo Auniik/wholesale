@@ -2,7 +2,6 @@
 
 namespace App\Models\Quotation;
 
-use App\Models\Inventory\Product;
 use App\Models\Inventory\ProductCode;
 use Illuminate\Database\Eloquent\Model;
 
@@ -22,20 +21,14 @@ class ChallanItem extends Model
         return $this->belongsTo(QuotationItem::class, 'quotation_item_id');
     }
 
-//    public function itemsDelivered()
-//    {
-//        return $this->hasMany(ChallanItemInventory::class, 'challan_item_id');
-//    }
+    public function challan()
+    {
+        return $this->belongsTo(Challan::class);
+    }
 
-//    public function deliveredQuantity()
-//    {
-//        return $this->itemsDelivered->sum('quantity');
-//    }
-//
-//    public function getChallanableQuantityAttribute()
-//    {
-//        return $this->quantity - $this->itemsDelivered->sum('quantity');
-//    }
-
+    public function getQuantityWiseCostAttribute()
+    {
+        return $this->quantity * $this->quotationItem->amount;
+    }
 
 }
