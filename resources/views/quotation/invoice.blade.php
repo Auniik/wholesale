@@ -94,7 +94,7 @@
                                 <td> Challan IDs : </td>
                                 <td>
                                     @foreach($quotation->challans->pluck('invoice_id', 'id') as $id => $invoiceId)
-                                        <a href="/quotations/{{$quotation->id}}/challans/{{$id}}/create">{{$invoiceId}},</a>
+                                        <a href="/quotations/challans/{{$id}}">{{$invoiceId}},</a>
                                     @endforeach
                                 </td>
                             </tr>

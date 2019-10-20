@@ -15,12 +15,21 @@ class ProductPurchaseController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $purchases = ProductPurchase::where('company_id', company_id());
+        if ($request->filled('manufacturer_id')){
+            $purchases->where('manufacturer_id', $request->manufacturer_id);
+        }
+        if ($request->filled('invoice_id')){
+            $purchases->where('challan_id', $request->invoice_id);
+        }
+
         return view('pharmacy.purchase.index',[
-            'purchases' => ProductPurchase::where('company_id', company_id())->paginate()
+            'purchases' => $purchases->paginate()
         ]);
     }
 

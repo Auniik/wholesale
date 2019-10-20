@@ -29,11 +29,11 @@ class Quotation extends Model
             });
 
             static::deleting(function ($model){
-                $model->items->each->delete();
                 foreach ($model->challans as $challan){
                     $challan->items->each->delete();
                 }
                 $model->challans->each->delete();
+                $model->items->each->delete();
             });
         }
 

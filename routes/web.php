@@ -223,6 +223,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('get-purchasable-products/{id}', 'Inventory\ProductPurchaseController@purchasableProducts');
     Route::get('get_codes/{product}', 'Inventory\ProductPurchaseController@productCodes');
     Route::get('load-product', 'Inventory\ProductController@loadProduct');
+    Route::get('load-manufacturers', 'Inventory\ProductController@loadManufacturers');
 
 //    Route::resource('inventory-units', 'Pharmacy\InventoryUnitController');
 //    Route::resource('inventory-generics', 'Pharmacy\MedicineGenericController');

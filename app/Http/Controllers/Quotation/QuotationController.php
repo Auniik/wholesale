@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Quotation\QuotationRequest;
 use App\Models\Quotation\Quotation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class QuotationController extends Controller
 {
@@ -81,9 +82,11 @@ class QuotationController extends Controller
      * @param  \App\Models\Quotation  $quotation
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Quotation $quotation)
+    public function update(QuotationRequest $request, Quotation $quotation)
     {
-        //
+        $invoice = $request->update($quotation);
+        return redirect()->route('quotations.show', $invoice->id)
+            ->withSuccess('Quotation Updated Successfully!');
     }
 
     /**
@@ -94,7 +97,10 @@ class QuotationController extends Controller
      */
     public function destroy(Quotation $quotation)
     {
-        $quotation->delete();
+//        DB::transaction(function ()use($quotation){
+            $quotation->delete();
+//        });
+
         return response([
             'check' => true
         ]);

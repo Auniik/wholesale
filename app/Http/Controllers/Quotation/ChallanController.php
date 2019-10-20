@@ -86,7 +86,7 @@ class ChallanController extends Controller
      * @param  \App\Models\Quotation\Challan $challan
      * @return void
      */
-    public function edit(Challan $challan)
+    public function edit(zChallan $challan)
     {
         //
     }

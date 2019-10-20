@@ -166,4 +166,13 @@ class ProductController extends Controller
             ->take(15)
             ->get();
     }
+
+
+    public function loadManufacturers(Request $request)
+    {
+        return Manufacturer::where('company_id', company_id())
+            ->where('name', 'LIKE', "%{$request->query('name')}%")
+            ->take(15)
+            ->get(['id', 'name']);
+    }
 }

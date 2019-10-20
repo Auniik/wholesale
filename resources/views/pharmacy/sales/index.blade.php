@@ -16,23 +16,16 @@
                         <div class="row search-voucher">
                             <form method="get">
                                 <div class="form-group col-md-3">
-                                    <label class="control-label col-md-12" for="patient_id">Patient / Customer
-                                        Name</label>
+                                    <label class="control-label col-md-12" for="party_id">Party Name</label>
                                     <div class="col-md-12 ">
-                                        <select name="patient_id" id="patient_id" class="form-control select">
-                                            <option value="">Select All</option>
-                                            {{--@foreach($patients as $id => $name)--}}
-                                                {{--<option value="{{$id}}" {{request('patient_id') == $id ? 'selected' :--}}
-                                                {{--''}}>{{$name}}</option>--}}
-                                            {{--@endforeach--}}
-                                        </select>
+                                        <input name="party_id" id="party_id" class="form-control">
                                     </div>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label class="control-label col-md-12" for="invoice">Invoice ID :</label>
                                     <div class="col-md-12">
                                         <input type="number" name="invoice_id" value="{{request('invoice_id')}}"
-                                               class="form-control" placeholder="Invoice ID">
+                                               class="form-control" placeholder="Invoice ID" autocomplete="off">
                                     </div>
                                 </div>
                                 <div class="form-group col-md-2">
@@ -51,7 +44,7 @@
                                 <th>Patient/Customer</th>
                                 <th>Date</th>
                                 <th class="text-right">Total Amount</th>
-                                <th class="text-right">Discount</th>
+                                {{--<th class="text-right">Discount</th>--}}
                                 <th class="text-right">Paid</th>
                                 <th class="text-right">Due</th>
                                 <th width="8%" colspan="3" class="text-center">Action</th>
@@ -66,16 +59,16 @@
                                     <td>{{$sale->party->name}}</td>
                                     <td>{{$sale->date->format('d/m/Y')}}</td>
                                     <td class="text-right">{{$sale->amount}}</td>
-                                    <td class="text-right">{{$sale->discount}}</td>
+                                    {{--<td class="text-right">{{$sale->discount}}</td>--}}
                                     <td class="text-right">{{$sale->paid}}</td>
                                     <td class="text-right">{{$sale->due}}</td>
 
                                     @can('pharmacy-sales-create')
-                                        <td>
+                                        {{--<td>--}}
 
-                                            <a href="{{route('product.sales.create', $sale->id)}}"
-                                               class="btn btn-xs btn-warning" ><i class="fa fa-usd"></i></a>
-                                        </td>
+                                            {{--<a href="{{route('product.sales.create', $sale->id)}}"--}}
+                                               {{--class="btn btn-xs btn-warning" ><i class="fa fa-usd"></i></a>--}}
+                                        {{--</td>--}}
                                     @endcan
 
                                     @can('pharmacy-sales-show')
@@ -99,3 +92,39 @@
         </div>
     </div>
 @endsection
+
+@section('script')
+    <script>
+        $(() => {
+            $("#party_id").select2({
+                placeholder: "Search for a Party",
+                minimumInputLength: 1,
+                ajax: {
+                    url: "{{url('load-parties')}}",
+                    dataType: 'json',
+                    quietMillis: 250,
+                    data: (term, page) => {
+                        return {
+                            name: term, // search term
+                        };
+                    },
+                    results: (data) => {
+                        return {
+                            results: $.map(data, (item) => {
+                                return {
+                                    text: item.name,
+                                    id: item.id
+                                }
+                            })
+                        };
+                    },
+                    cache: true
+                },
+
+            });
+        })
+
+    </script>
+@stop
+
+

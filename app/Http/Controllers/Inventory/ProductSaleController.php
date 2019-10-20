@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Pharmacy\SalesRequest;
 use App\Models\Inventory\Product;
 use App\Models\Inventory\ProductSale;
+use App\Models\Party;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 
@@ -32,12 +33,16 @@ class ProductSaleController extends Controller
     public function index(Request $request)
     {
         $sales = ProductSale::where('company_id', company_id());
+
         if ($request->filled('invoice_id')){
             $sales->where('invoice_id', $request->invoice_id);
         }
+        if ($request->filled('party_id')){
+            $sales->where('party_id', $request->party_id);
+        }
 
         return view('pharmacy.sales.index',[
-            'sales' => $sales->paginate(),
+            'sales' => $sales->paginate()
         ]);
     }
 

@@ -14,6 +14,32 @@
                         <h4 class="panel-title">All Products Purchases</h4>
                     </div>
                     <div class="panel-body">
+                        <div class="row search-voucher">
+                            <form method="get">
+                                <div class="form-group col-md-3">
+                                    <label class="control-label col-md-12" for="manufacturer_id">Manufacturer Name
+                                        :</label>
+                                    <div class="col-md-12 ">
+                                        <input type="hidden" id="manufacturer_id" name="manufacturer_id">
+                                        <input type="text" class="form-control manufacturer_name"
+                                               placeholder="Manufacturer Name" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label class="control-label col-md-12" for="service">Invoice ID :</label>
+                                    <div class="col-md-12">
+                                        <input type="text" name="invoice_id" value="{{request('invoice_id')}}"
+                                               class="form-control" placeholder="Invoice ID" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label class="col-md-12 no-padding" >&nbsp;</label>
+                                    <div class="col-sm-12 no-padding">
+                                        <button type="submit" style="margin-top: 2px;" class="btn btn-success col-md-12">Search</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                         <table id="data-table" class="table table-striped table-bordered nowrap" width="100%">
                             <thead>
                             <tr>
@@ -25,7 +51,7 @@
                                 {{--<th>Discount</th>--}}
                                 <th>Total Paid</th>
                                 <th>Due</th>
-                                <th width="8%" colspan="3" class="text-center">Action</th>
+                                <th width="8%" colspan="2" class="text-center">Action</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -51,8 +77,8 @@
                                         <label class="btn btn-xs btn-default"
                                                disabled="">{{$purchase->totalAmount != $purchase->paid ? 'Partial' : 'Paid'}}</label>
                                     </td>
-                                    <td><a href="{{route('product.purchases.edit', $purchase->id)}}" class="btn
-                                    btn-xs btn-success" data-toggle="modal"><i class="fa fa-pencil-square-o"></i></a></td>
+                                    {{--<td><a href="{{route('product.purchases.edit', $purchase->id)}}" class="btn--}}
+                                    {{--btn-xs btn-success" data-toggle="modal"><i class="fa fa-pencil-square-o"></i></a></td>--}}
                                     <td>
                                         @can('pharmacy-purchase-delete')
                                         <a href="{{route('product.purchases.destroy', $purchase->id)}}" class="btn
@@ -70,3 +96,25 @@
         </div>
     </div>
 @endsection
+
+@section('script')
+    <script src="{{asset('custom_js/loadDetails.js')}}"></script>
+    <script>
+
+        loadDetails({
+            selector: '.manufacturer_name',
+            url: '{!! url('/load-manufacturers') !!}',
+            select: (event, ui) => {
+                $(this.selector).val(ui.item.data.name);
+                $("#manufacturer_id").val(ui.item.data.id);
+                if ($("#manufacturer_id").val()){
+                    $(this.selector).removeClass('has-error').attr('title', '');
+                }
+            },
+            search: function (event) {
+                $(this.selector).addClass('has-error').prop('title', 'Party Not Recognized');
+                $("#manufacturer_id").val('');
+            }
+        });
+    </script>
+@stop

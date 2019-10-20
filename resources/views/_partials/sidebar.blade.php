@@ -138,36 +138,20 @@
     <li class="submenu">
         <a href="javascript:void(0);">
             <span class="icon"><i class="fa fa-file-archive-o"></i></span>
-            <span class="text">MIS Reports </span><span class="arrow"></span>
+            <span class="text">Reports </span><span class="arrow"></span>
         </a>
 
         <ul class=''>
-            <li class="submenu"><a href="javascript:void(0);">Accounts<span class="arrow"></span></a>
-                <ul class=''>
-                    <li><a href="{{ url('reports/accounts/income-expense') }}">Income-Expense</a></li>
-                    <li><a href="{{ url('reports/accounts/petty-cash') }}">Petty Cash</a></li>
-                    <li><a href="{{ url('reports/accounts/cash-collections') }}">Cash Collections</a></li>
-                    <li><a href="{{ url('reports/accounts/daily-cash-receives') }}">Daily Cash Received</a></li>
-                </ul>
-            </li>
+            <li><a href="{{ url('reports/accounts/income-expense') }}">Income-Expense</a></li>
+            <li><a href="{{ url('reports/accounts/petty-cash') }}">Petty Cash</a></li>
+            <li><a href="{{ url('reports/accounts/cash-collections') }}">Cash Collections</a></li>
+            <li><a href="{{ url('reports/pharmacy/sales/product-wise') }}">Sales Report (Product Wise)</a></li>
+            <li><a href="{{ url('/reports/pharmacy/sales/customer-wise') }}">Sales Report (Customer Wise)</a></li>
+            <li><a href="{{ url('/reports/pharmacy/purchase/product-wise') }}">Purchase Report (Product Wise)</a></li>
+            <li><a href="{{ url('/reports/pharmacy/inventory') }}">Inventory Report</a></li>
+            <li><a href="{{ url('/reports/pharmacy/inventory/stock-alert') }}">Stock Alert Report</a></li>
         </ul>
-        @can('inventory-settings-list')
-            <ul>
-                <li class="submenu"><a href="javascript:void(0);">Pharmacy<span class="arrow"></span></a>
-                    <ul class=''>
-                        <li><a href="{{ url('reports/pharmacy/sales/product-wise') }}">Sales Report (Product Wise)
-                            </a></li>
-                        <li><a href="{{ url('/reports/pharmacy/sales/customer-wise') }}">Sales Report (Customer Wise)
-                            </a></li>
 
-                        <li><a href="{{ url('/reports/pharmacy/purchase/product-wise') }}">Purchase Report (Product
-                                Wise)</a></li>
-                        <li><a href="{{ url('/reports/pharmacy/inventory') }}">Inventory Report</a></li>
-                        <li><a href="{{ url('reports/pharmacy/inventory/stock-alert') }}">Stock Alert Report</a></li>
-                    </ul>
-                </li>
-            </ul>
-        @endcaN
 
     </li>
     @endcan
